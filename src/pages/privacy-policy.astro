@@ -1,0 +1,75 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { siteConfig } from "../data/landing.js";
+
+const title = "개인정보처리방침 | 고유가 피해지원금 정보센터";
+const description =
+  "고유가 피해지원금 정보센터의 개인정보 처리 기준과 문의 방법을 안내합니다.";
+const canonicalUrl = `${siteConfig.siteUrl}/privacy-policy`;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  url: canonicalUrl,
+  description,
+  inLanguage: "ko-KR",
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalUrl={canonicalUrl}
+  ogImageUrl={new URL(siteConfig.ogImagePath, siteConfig.siteUrl).toString()}
+  locale={siteConfig.locale}
+  schema={schema}
+  adsenseClientId={siteConfig.adsenseClientId}
+>
+  <Header brandName={siteConfig.brandName} primaryCtaUrl={siteConfig.primaryCtaUrl} />
+
+  <main class="mx-auto max-w-4xl px-4 pb-16 pt-28 md:px-6 md:pt-32">
+    <section class="rounded-[2rem] border border-stone-200/80 bg-white p-6 shadow-[0_18px_46px_rgba(15,23,42,0.04)] md:p-8">
+      <p class="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-stone-400">
+        policy
+      </p>
+      <h1 class="mt-4 text-3xl font-extrabold tracking-[-0.04em] text-stone-900 md:text-5xl">
+        개인정보처리방침
+      </h1>
+      <div class="mt-6 space-y-6 text-sm leading-8 text-stone-600 md:text-base">
+        <p>
+          본 사이트는 고유가 피해지원금 관련 안내와 외부 가이드 연결을 목적으로 운영됩니다.
+          별도의 회원가입 기능이나 자체 결제 기능은 제공하지 않습니다.
+        </p>
+        <p>
+          사이트 운영 과정에서 기본적인 접속 로그, 브라우저 정보, 광고 노출 및 클릭 측정을 위한
+          기술 정보가 수집될 수 있습니다. 이러한 정보는 사이트 운영, 통계 확인, 광고 서비스 제공을
+          위한 범위 내에서 활용됩니다.
+        </p>
+        <p>
+          본 사이트에는 Google AdSense 등 제3자 광고 서비스가 적용될 수 있으며, 관련 서비스는
+          쿠키를 사용해 사용자 맞춤형 광고를 제공할 수 있습니다. 광고와 관련된 세부 정책은 각
+          서비스 제공자의 정책을 따릅니다.
+        </p>
+        <p>
+          외부 링크를 통해 이동한 페이지의 개인정보 처리 방식은 해당 사이트의 정책을 따르며, 본
+          사이트는 외부 사이트의 운영 및 데이터 처리 방식에 대해 직접 통제하지 않습니다.
+        </p>
+        <p>
+          개인정보 처리와 관련한 문의는 아래 이메일로 연락할 수 있습니다:
+          <a class="font-semibold text-stone-900" href={`mailto:${siteConfig.supportEmail}`}>
+            {siteConfig.supportEmail}
+          </a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <Footer
+    brandName={siteConfig.brandName}
+    ownerName={siteConfig.ownerName}
+    supportEmail={siteConfig.supportEmail}
+  />
+</BaseLayout>

@@ -1,0 +1,20 @@
+# 고유가 피해지원금 정보센터
+
+> 고유가 피해지원금 지원 대상, 소득 하위 70% 기준, 신청 방법, 카드·앱 다운로드 안내를 연결하는 한국어 랜딩페이지입니다.
+
+Preferred URL: https://oilguide.infoarounds.com/
+Language: ko-KR
+Contact: mailto:ttugttagi01@gmail.com
+
+## Primary page
+- https://oilguide.infoarounds.com/
+
+## Related resources
+- 지원 대상 확인: https://infoarounds.com/2025-%eb%b3%b5%ec%a7%80%ec%a0%95%eb%b3%b4/bottom-70-income-criteria-calculator/
+- 신청 방법 보기: https://infoarounds.com/2025-%eb%b3%b5%ec%a7%80%ec%a0%95%eb%b3%b4/2026-high-oil-price-support-guide-2/
+- 카드·앱 다운로드: https://infoarounds.com/%ec%9d%bc%ec%83%81%ec%86%8d-%ed%95%84%ec%9a%94%ec%a0%95%eb%b3%b4/card-app-download/
+
+## Summary
+- 고유가 피해지원금의 핵심은 먼저 지원 대상 여부를 확인하고, 이후 신청 방법과 지급 수단을 확인하는 것입니다.
+- 주요 대상은 기초생활수급자, 차상위계층, 한부모가족, 소득 하위 70% 국민입니다.
+- 지급 금액은 대상 및 거주 지역에 따라 최소 10만 원부터 최대 60만 원까지 달라질 수 있습니다.

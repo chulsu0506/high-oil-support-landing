@@ -4,16 +4,96 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import AdBlock from "../components/AdBlock.astro";
-import { payoutRows, quickCards, siteConfig } from "../data/landing.js";
+import { faqItems, payoutRows, quickCards, siteConfig } from "../data/landing.js";
 
-const { appDownloadUrl, brandName, ownerName, primaryCtaUrl, secondaryCtaUrl, supportEmail } =
-  siteConfig;
+const {
+  appDownloadUrl,
+  brandName,
+  locale,
+  ogImagePath,
+  ownerName,
+  primaryCtaUrl,
+  publishedAt,
+  secondaryCtaUrl,
+  siteDescription,
+  siteTitle,
+  siteUrl,
+  supportEmail,
+  updatedAt,
+} = siteConfig;
+
 const hasAdUnit = Boolean(siteConfig.adsenseClientId && siteConfig.adsenseSlotId);
+const canonicalUrl = siteUrl;
+const ogImageUrl = new URL(ogImagePath, siteUrl).toString();
+const seoTitle = `${siteTitle} | 지원 대상 확인과 신청 방법`;
+const seoDescription = siteDescription;
+
+const seoSchema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteTitle,
+    url: siteUrl,
+    inLanguage: "ko-KR",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: ownerName,
+    url: siteUrl,
+    email: `mailto:${supportEmail}`,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: seoTitle,
+    url: canonicalUrl,
+    description: seoDescription,
+    inLanguage: "ko-KR",
+    datePublished: publishedAt,
+    dateModified: updatedAt,
+    isPartOf: {
+      "@type": "WebSite",
+      name: siteTitle,
+      url: siteUrl,
+    },
+    about: [
+      "고유가 피해지원금",
+      "지원 대상",
+      "소득 하위 70%",
+      "기초생활수급자",
+      "차상위계층",
+      "한부모가족",
+      "신청 방법",
+      "앱 다운로드",
+    ],
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      url: ogImageUrl,
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  },
+];
 ---
 
 <BaseLayout
-  title={`${brandName} | 신청 안내`}
-  description="고유가 피해지원금 신청 안내"
+  title={seoTitle}
+  description={seoDescription}
+  canonicalUrl={canonicalUrl}
+  ogImageUrl={ogImageUrl}
+  locale={locale}
+  schema={seoSchema}
   adsenseClientId={siteConfig.adsenseClientId}
 >
   <Header brandName={brandName} primaryCtaUrl={primaryCtaUrl} />
@@ -22,7 +102,7 @@ const hasAdUnit = Boolean(siteConfig.adsenseClientId && siteConfig.adsenseSlotId
     <section class="reveal grid gap-8 rounded-[2rem] border border-stone-200/80 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.05)] md:grid-cols-[1.04fr_0.96fr] md:items-center md:p-10">
       <div>
         <p class="inline-flex rounded-full bg-stone-100 px-3 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-stone-500">
-          온라인 신청
+          공식 요약 안내
         </p>
         <h1 class="mt-5 max-w-3xl text-4xl font-extrabold leading-[1.08] tracking-[-0.05em] text-stone-900 md:text-6xl">
           고유가 피해지원금
@@ -30,7 +110,8 @@ const hasAdUnit = Boolean(siteConfig.adsenseClientId && siteConfig.adsenseSlotId
           신청 안내
         </h1>
         <p class="mt-5 max-w-2xl text-sm leading-7 text-stone-600 md:text-lg md:leading-8">
-          취약계층 우선 지급, 국민 70% 대상, 1인당 10만원~60만원 지원
+          지원 대상, 소득 하위 70% 기준, 신청 방법, 카드·앱 관련 안내까지 한 페이지에서
+          빠르게 확인할 수 있습니다.
         </p>
 
         <div class="mt-7 flex flex-col gap-3 sm:flex-row">
@@ -53,22 +134,22 @@ const hasAdUnit = Boolean(siteConfig.adsenseClientId && siteConfig.adsenseSlotId
             href={appDownloadUrl}
             class="inline-flex items-center gap-2 text-sm font-semibold text-orange-700 underline decoration-orange-200 underline-offset-4"
           >
-            앱·어플 다운로드 바로가기
+            카드·앱 다운로드 바로가기
           </a>
         </div>
 
         <ul class="mt-7 space-y-3">
           <li class="flex gap-3 text-sm leading-7 text-stone-600">
             <span class="mt-2 size-2 rounded-full bg-orange-400"></span>
-            <span>먼저 내가 대상인지 확인</span>
+            <span>먼저 내가 지원 대상인지 확인</span>
           </li>
           <li class="flex gap-3 text-sm leading-7 text-stone-600">
             <span class="mt-2 size-2 rounded-full bg-orange-400"></span>
-            <span>신청 기간과 지급 수단 확인</span>
+            <span>신청 기간과 지급 수단을 확인</span>
           </li>
           <li class="flex gap-3 text-sm leading-7 text-stone-600">
             <span class="mt-2 size-2 rounded-full bg-orange-400"></span>
-            <span>필요하면 앱·어플 다운로드 이동</span>
+            <span>필요하면 카드·앱 다운로드 페이지로 이동</span>
           </li>
         </ul>
       </div>
@@ -80,18 +161,20 @@ const hasAdUnit = Boolean(siteConfig.adsenseClientId && siteConfig.adsenseSlotId
         <div class="relative overflow-hidden rounded-[1.9rem] border border-stone-200/80 bg-white p-3 shadow-[0_18px_42px_rgba(15,23,42,0.08)]">
           <img
             src="/hero-photo.png"
-            alt="밝은 원목 테이블 위 서류와 휴대폰이 놓인 신청 안내 분위기의 대표 이미지"
+            alt="서류와 모바일 화면이 놓인 고유가 피해지원금 안내 이미지"
             class="aspect-[4/5] w-full rounded-[1.5rem] object-cover object-center"
           />
 
           <div class="pointer-events-none absolute inset-x-3 bottom-3 rounded-b-[1.5rem] bg-[linear-gradient(180deg,rgba(17,24,39,0),rgba(17,24,39,0.46))] px-5 pb-5 pt-16">
             <div class="rounded-[1.2rem] border border-white/20 bg-white/88 px-4 py-3 backdrop-blur">
-              <strong class="block text-sm text-stone-900 md:text-base">신청 기간과 지급 수단 확인</strong>
+              <strong class="block text-sm text-stone-900 md:text-base">
+                지원 대상과 지급 금액을 먼저 확인하세요
+              </strong>
             </div>
           </div>
 
           <div class="float-soft absolute left-5 top-5 rounded-full border border-stone-200/80 bg-white/95 px-4 py-2 text-xs font-semibold text-stone-700 shadow-sm">
-            1인당 10만~60만원
+            1인당 최소 10만 원~최대 60만 원
           </div>
         </div>
       </div>
@@ -99,8 +182,9 @@ const hasAdUnit = Boolean(siteConfig.adsenseClientId && siteConfig.adsenseSlotId
 
     <section id="summary" class="reveal mt-6 rounded-[2rem] border border-stone-200/80 bg-white p-6 shadow-[0_18px_46px_rgba(15,23,42,0.04)] md:p-8">
       <SectionHeading
-        kicker="핵심 내용"
-        title="먼저 확인할 두 가지"
+        kicker="핵심 안내"
+        title="먼저 확인해야 할 2가지"
+        description="지원 대상 확인과 신청 방법 보기로 바로 이동할 수 있게 핵심 동선만 먼저 정리했습니다."
       />
 
       <div class="mt-6 grid gap-4 md:grid-cols-2">
@@ -128,16 +212,19 @@ const hasAdUnit = Boolean(siteConfig.adsenseClientId && siteConfig.adsenseSlotId
           <p class="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-stone-400">
             보조 안내
           </p>
-          <strong class="mt-2 block text-lg text-stone-900">카드사 앱이 필요하면 다운로드 페이지에서 확인</strong>
+          <strong class="mt-2 block text-lg text-stone-900">
+            카드사 앱이나 관련 앱이 필요하다면 다운로드 페이지에서 확인하세요
+          </strong>
           <p class="mt-2 text-sm leading-7 text-stone-600">
-            신청 수단이 신용·체크카드인 경우 앱 설치가 필요한 분만 추가로 확인하면 됩니다.
+            신청 수단이 카드·앱인 경우에만 추가로 확인하면 됩니다. 메인 흐름은 지원 대상
+            확인과 신청 방법 보기가 중심입니다.
           </p>
         </div>
         <a
           href={appDownloadUrl}
           class="mt-4 inline-flex min-h-12 items-center justify-center rounded-full border border-stone-200 bg-white px-5 text-sm font-semibold text-stone-700 transition hover:-translate-y-0.5 hover:border-orange-200/80 md:mt-0"
         >
-          앱·어플 다운로드
+          카드·앱 다운로드
         </a>
       </div>
     </section>
@@ -147,6 +234,7 @@ const hasAdUnit = Boolean(siteConfig.adsenseClientId && siteConfig.adsenseSlotId
         <AdBlock
           clientId={siteConfig.adsenseClientId}
           slotId={siteConfig.adsenseSlotId}
+          label="광고"
           className="mt-6"
         />
       )
@@ -155,7 +243,8 @@ const hasAdUnit = Boolean(siteConfig.adsenseClientId && siteConfig.adsenseSlotId
     <section id="payout" class="reveal mt-6 rounded-[2rem] border border-stone-200/80 bg-white p-6 shadow-[0_18px_46px_rgba(15,23,42,0.04)] md:p-8">
       <SectionHeading
         kicker="지급 요약"
-        title="한눈에 보는 지원 기준"
+        title="한눈에 보는 지급 기준"
+        description="지급 금액은 지원 대상과 지역에 따라 달라질 수 있으므로, 상세 기준은 연결된 안내 글에서 한 번 더 확인하는 것이 좋습니다."
       />
 
       <div class="mt-6 overflow-hidden rounded-[1.5rem] border border-stone-200/80">
@@ -194,6 +283,25 @@ const hasAdUnit = Boolean(siteConfig.adsenseClientId && siteConfig.adsenseSlotId
       </div>
     </section>
 
+    <section id="faq" class="reveal mt-6 rounded-[2rem] border border-stone-200/80 bg-white p-6 shadow-[0_18px_46px_rgba(15,23,42,0.04)] md:p-8">
+      <SectionHeading
+        kicker="자주 묻는 질문"
+        title="검색 전에 많이 확인하는 질문"
+        description="지원 기준과 지급 금액에서 가장 많이 묻는 질문만 먼저 정리했습니다."
+      />
+
+      <div class="mt-6 space-y-4">
+        {
+          faqItems.map((item) => (
+            <article class="rounded-[1.5rem] border border-stone-200/80 bg-stone-50 px-5 py-4">
+              <h3 class="text-base font-semibold text-stone-900 md:text-lg">{item.question}</h3>
+              <p class="mt-2 text-sm leading-7 text-stone-600 md:text-base">{item.answer}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
     <section id="final-cta" class="reveal mt-6 rounded-[2rem] bg-[linear-gradient(135deg,#1f2937,#34485d)] px-6 py-8 text-white shadow-[0_22px_60px_rgba(15,23,42,0.12)] md:px-8 md:py-10">
       <h2 class="mt-4 max-w-3xl text-3xl font-extrabold leading-tight tracking-[-0.04em] md:text-5xl">
         먼저 지원 대상부터
@@ -201,7 +309,8 @@ const hasAdUnit = Boolean(siteConfig.adsenseClientId && siteConfig.adsenseSlotId
         확인해보세요
       </h2>
       <p class="mt-4 max-w-2xl text-sm leading-8 text-white/72 md:text-base">
-        소득 하위 70%, 기초수급자, 차상위, 한부모 기준을 먼저 확인한 뒤 신청 방법을 보면 훨씬 빠릅니다.
+        소득 하위 70%, 기초생활수급자, 차상위계층, 한부모가족 기준을 먼저 확인한 뒤
+        신청 방법으로 이동하는 흐름이 가장 빠릅니다.
       </p>
 
       <div class="mt-7 flex flex-col gap-3 sm:flex-row">
@@ -225,6 +334,7 @@ const hasAdUnit = Boolean(siteConfig.adsenseClientId && siteConfig.adsenseSlotId
         <AdBlock
           clientId={siteConfig.adsenseClientId}
           slotId={siteConfig.adsenseSlotId}
+          label="광고"
           className="mt-6"
         />
       )
@@ -236,8 +346,8 @@ const hasAdUnit = Boolean(siteConfig.adsenseClientId && siteConfig.adsenseSlotId
   <div class="fixed inset-x-4 bottom-4 z-40 rounded-[1.3rem] border border-stone-200/80 bg-white/95 p-3 shadow-[0_16px_34px_rgba(15,23,42,0.12)] xl:hidden">
     <div class="flex items-center gap-3">
       <div class="min-w-0 flex-1">
-        <strong class="block text-sm text-stone-900">모바일 신청 버튼</strong>
-        <p class="mt-1 truncate text-xs text-stone-500">먼저 지원 대상부터 확인</p>
+        <strong class="block text-sm text-stone-900">모바일 빠른 이동</strong>
+        <p class="mt-1 truncate text-xs text-stone-500">먼저 지원 대상 여부를 확인하세요</p>
       </div>
       <a
         href={primaryCtaUrl}

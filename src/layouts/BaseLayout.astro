@@ -2,10 +2,18 @@
 import "../styles/global.css";
 
 const {
-  title = "고유가 지원금 정보센터",
-  description = "전환 중심 랜딩페이지 템플릿",
+  title = "고유가 피해지원금 정보센터",
+  description = "고유가 피해지원금 지원 대상과 신청 방법을 빠르게 확인할 수 있는 안내 페이지입니다.",
+  siteName = "고유가 피해지원금 정보센터",
+  canonicalUrl = "",
+  ogImageUrl = "",
+  locale = "ko_KR",
+  robots = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+  schema = [],
   adsenseClientId = "",
 } = Astro.props;
+
+const schemaItems = Array.isArray(schema) ? schema.filter(Boolean) : [schema].filter(Boolean);
 ---
 
 <!doctype html>
@@ -15,16 +23,38 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    <meta name="googlebot" content={robots} />
     <meta name="theme-color" content="#f7f3ec" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:locale" content={locale} />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    {ogImageUrl && <meta property="og:image:alt" content={title} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="apple-mobile-web-app-title" content={siteName} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    {canonicalUrl && <link rel="alternate" hrefLang="ko-KR" href={canonicalUrl} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link
       rel="stylesheet"
       as="style"
       crossorigin
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
     />
+    {
+      schemaItems.map((item) => (
+        <script type="application/ld+json" set:html={JSON.stringify(item)} />
+      ))
+    }
     {
       adsenseClientId && (
         <script
