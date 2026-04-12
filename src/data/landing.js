@@ -2,7 +2,7 @@ export const siteConfig = {
   brandName: "고유가 지원금 정보센터",
   ownerName: "Your Guide Team",
   supportEmail: "ttugttagi01@gmail.com",
-  adsenseClientId: "",
+  adsenseClientId: "ca-pub-6067163195544027",
   adsenseSlotId: "",
   primaryCtaUrl:
     "https://infoarounds.com/2025-%eb%b3%b5%ec%a7%80%ec%a0%95%eb%b3%b4/bottom-70-income-criteria-calculator/",
