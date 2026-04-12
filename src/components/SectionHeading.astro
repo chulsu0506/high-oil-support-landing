@@ -1,0 +1,13 @@
+---
+const { kicker, title, description, align = "left" } = Astro.props;
+---
+
+<div class:list={["space-y-3", align === "center" && "text-center"]}>
+  <p class="text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-stone-400">
+    {kicker}
+  </p>
+  <h2 class="text-2xl font-extrabold leading-tight tracking-[-0.03em] text-stone-900 md:text-4xl">
+    {title}
+  </h2>
+  {description && <p class="max-w-3xl text-sm leading-7 text-stone-600 md:text-base">{description}</p>}
+</div>

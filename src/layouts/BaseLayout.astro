@@ -1,0 +1,31 @@
+---
+import "../styles/global.css";
+
+const {
+  title = "고유가 지원금 정보센터",
+  description = "전환 중심 랜딩페이지 템플릿",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f7f3ec" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
+    />
+  </head>
+  <body class="min-h-screen bg-[linear-gradient(180deg,#f8f5ef_0%,#fcfbf8_48%,#f3f6f7_100%)] text-stone-900">
+    <slot />
+  </body>
+</html>
