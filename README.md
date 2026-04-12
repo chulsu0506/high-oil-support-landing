@@ -18,13 +18,16 @@ npm run dev -- --host 127.0.0.1 --port 4173
 - `primaryCtaUrl`: 메인 신청 버튼 링크
 - `secondaryCtaUrl`: 보조 이동 링크
 - `appDownloadUrl`: 앱·어플 다운로드 링크
+- `adsenseClientId`: AdSense의 `ca-pub-...` 값
+- `adsenseSlotId`: 표시할 광고 슬롯 ID
 - `brandName`: 사이트 이름
 - `ownerName`: 푸터 운영자명
 - `supportEmail`: 푸터 이메일
 
 ## 광고 영역
 
-현재는 본문 중간 가로형 광고 한 곳만 남겨두었습니다.
+현재는 본문 중간 가로형 광고 한 곳이 준비되어 있습니다.
+`src/data/landing.js`에 `adsenseClientId`, `adsenseSlotId`를 넣으면 자동으로 출력됩니다.
 
 ## 배포
 
