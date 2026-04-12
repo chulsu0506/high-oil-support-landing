@@ -3,7 +3,7 @@ export const siteConfig = {
   ownerName: "Your Guide Team",
   supportEmail: "ttugttagi01@gmail.com",
   adsenseClientId: "ca-pub-6067163195544027",
-  adsenseSlotId: "",
+  adsenseSlotId: "3408440776",
   primaryCtaUrl:
     "https://infoarounds.com/2025-%eb%b3%b5%ec%a7%80%ec%a0%95%eb%b3%b4/bottom-70-income-criteria-calculator/",
   secondaryCtaUrl:
