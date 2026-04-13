@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://oilguide.infoarounds.com/sitemap-index.xml
+#DaumWebMasterTool:21e8a63f95afec7fd1e5d833234411ad2dafa1eff64f38d19e8a548e1317e8ab:Mfaq2yDqAhtvFkTUpv+l6Q==
