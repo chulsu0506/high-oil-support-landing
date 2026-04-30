@@ -17,7 +17,7 @@ export const siteConfig = {
   secondaryCtaUrl:
     "https://infoarounds.com/2025-%eb%b3%b5%ec%a7%80%ec%a0%95%eb%b3%b4/2026-high-oil-price-support-guide-2/",
   phaseTwoGuideUrl:
-    "https://www.mois.go.kr/frt/sub/a06/b07/highOilPriceSupport/screen.do",
+    "https://infoarounds.com/2025-%eb%b3%b5%ec%a7%80%ec%a0%95%eb%b3%b4/high-oil-price-support-2nd-guide/",
   appDownloadUrl:
     "https://infoarounds.com/%ec%9d%bc%ec%83%81%ec%86%8d-%ed%95%84%ec%9a%94%ec%a0%95%eb%b3%b4/card-app-download/",
 };
