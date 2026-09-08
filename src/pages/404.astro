@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { siteConfig } from "../data/portal.js";
+---
+
+<BaseLayout
+  title="페이지를 찾을 수 없습니다 | 오일가이드"
+  description="요청한 페이지를 찾을 수 없습니다. 오일가이드 홈에서 오늘의 유가와 주유비 계산기를 이용해 보세요."
+  siteName={siteConfig.brandName}
+  robots="noindex, follow"
+>
+  <Header brandName={siteConfig.brandName} />
+  <main class="page-shell">
+    <section class="subpage-hero">
+      <span class="eyebrow">404 NOT FOUND</span>
+      <h1>찾으시는 페이지가<br />이동했거나 없습니다</h1>
+      <p>주소를 다시 확인하거나 홈으로 돌아가 오늘의 유가, 주유비 계산기, 에너지 지원 정보를 이용해 주세요.</p>
+      <div class="hero__actions"><a class="button button--amber" href="/">오일가이드 홈으로</a></div>
+    </section>
+  </main>
+  <Footer brandName={siteConfig.brandName} ownerName={siteConfig.ownerName} supportEmail={siteConfig.supportEmail} />
+</BaseLayout>

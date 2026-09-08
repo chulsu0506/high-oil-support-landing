@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import FuelCalculator from "../components/FuelCalculator.astro";
+import AdBlock from "../components/AdBlock.astro";
+import { siteConfig } from "../data/portal.js";
+
+const title = "주유비 계산기 | 거리·연비로 월간 기름값 계산";
+const description = "이동거리, 차량 실연비, 리터당 유가를 입력해 하루·월간·연간 주유비와 1인당 분담 비용을 계산하세요.";
+const canonicalUrl = `${siteConfig.siteUrl}/fuel-cost-calculator/`;
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    url: canonicalUrl,
+    description,
+    inLanguage: "ko-KR",
+    dateModified: siteConfig.updatedAt,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "오일가이드 주유비 계산기",
+    applicationCategory: "FinanceApplication",
+    operatingSystem: "Web",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "KRW" },
+  },
+];
+---
+
+<BaseLayout title={title} description={description} siteName={siteConfig.brandName} canonicalUrl={canonicalUrl} ogImageUrl={new URL(siteConfig.ogImagePath, siteConfig.siteUrl).toString()} locale={siteConfig.locale} schema={schema} adsenseClientId={siteConfig.adsenseClientId}>
+  <Header brandName={siteConfig.brandName} />
+  <main class="page-shell">
+    <section class="subpage-hero">
+      <span class="eyebrow">FREE FUEL COST TOOL</span>
+      <h1>거리와 연비로 계산하는<br />주유비 계산기</h1>
+      <p>통근, 여행, 카풀처럼 반복되는 이동 비용을 먼저 숫자로 확인하세요. 편도·왕복과 분담 인원까지 반영할 수 있습니다.</p>
+    </section>
+    <section class="subpage-content"><FuelCalculator compact={true} /></section>
+    <AdBlock clientId={siteConfig.adsenseClientId} slotId={siteConfig.adsenseSlotId} />
+    <section class="content-section content-section--compact">
+      <div class="legal-card">
+        <h2 style="margin-top:0">주유비는 이렇게 계산합니다</h2>
+        <p><strong>총 이동거리 ÷ 차량 실연비 × 리터당 유가</strong>를 기본식으로 사용합니다. 예를 들어 왕복 42km를 연비 12.5km/L 차량으로 이동하고 휘발유가 1,850원/L라면 하루 예상 연료비는 약 6,216원입니다.</p>
+        <h2>공인연비보다 실연비를 넣어보세요</h2>
+        <p>도심 정체, 짧은 거리 반복, 냉난방 사용이 많다면 공인연비보다 실제 계기판의 누적 평균연비를 입력하는 편이 현실적인 결과에 가깝습니다.</p>
+        <h2>싼 주유소까지 가는 비용도 비교하세요</h2>
+        <p>리터당 30원이 저렴해도 왕복 이동에 더 많은 연료가 든다면 실제 절약액은 줄어듭니다. 추가 이동거리의 연료비와 예상 주유량을 함께 비교하세요.</p>
+      </div>
+    </section>
+  </main>
+  <Footer brandName={siteConfig.brandName} ownerName={siteConfig.ownerName} supportEmail={siteConfig.supportEmail} />
+</BaseLayout>

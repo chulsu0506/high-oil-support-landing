@@ -3,83 +3,40 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import SectionHeading from "../components/SectionHeading.astro";
+import FuelPriceBoard from "../components/FuelPriceBoard.astro";
+import FuelCalculator from "../components/FuelCalculator.astro";
+import NearbyStations from "../components/NearbyStations.astro";
 import AdBlock from "../components/AdBlock.astro";
 import {
+  archivedSupportLinks,
   faqItems,
-  payoutRows,
-  phaseTwoHighlights,
-  phaseTwoPoints,
-  quickCards,
+  savingGuides,
   siteConfig,
-} from "../data/landing.js";
+  supportPrograms,
+} from "../data/portal.js";
 
-const {
-  appDownloadUrl,
-  brandName,
-  locale,
-  ogImagePath,
-  ownerName,
-  phaseTwoGuideUrl,
-  primaryCtaUrl,
-  publishedAt,
-  secondaryCtaUrl,
-  siteDescription,
-  siteTitle,
-  siteUrl,
-  supportEmail,
-  updatedAt,
-} = siteConfig;
-
-const hasAdUnit = Boolean(siteConfig.adsenseClientId && siteConfig.adsenseSlotId);
-const canonicalUrl = siteUrl;
-const ogImageUrl = new URL(ogImagePath, siteUrl).toString();
-const seoTitle = `${siteTitle} | 5월 18일 2차 신청과 지원 대상 확인`;
-const seoDescription = siteDescription;
-
-const seoSchema = [
+const canonicalUrl = siteConfig.siteUrl;
+const ogImageUrl = new URL(siteConfig.ogImagePath, siteConfig.siteUrl).toString();
+const schema = [
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: siteTitle,
-    url: siteUrl,
+    name: siteConfig.brandName,
+    alternateName: "기름값·에너지비 절약센터",
+    url: siteConfig.siteUrl,
     inLanguage: "ko-KR",
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: ownerName,
-    url: siteUrl,
-    email: `mailto:${supportEmail}`,
   },
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: seoTitle,
+    name: siteConfig.siteTitle,
     url: canonicalUrl,
-    description: seoDescription,
+    description: siteConfig.siteDescription,
     inLanguage: "ko-KR",
-    datePublished: publishedAt,
-    dateModified: updatedAt,
-    isPartOf: {
-      "@type": "WebSite",
-      name: siteTitle,
-      url: siteUrl,
-    },
-    about: [
-      "고유가 피해지원금",
-      "2차 신청",
-      "지원 대상",
-      "소득 하위 70%",
-      "기초생활수급자",
-      "차상위계층",
-      "한부모가족",
-      "신청 방법",
-      "카드 앱 다운로드",
-    ],
-    primaryImageOfPage: {
-      "@type": "ImageObject",
-      url: ogImageUrl,
-    },
+    datePublished: siteConfig.publishedAt,
+    dateModified: siteConfig.updatedAt,
+    primaryImageOfPage: { "@type": "ImageObject", url: ogImageUrl },
+    about: ["전국 평균 유가", "주유비 계산", "주변 주유소", "에너지바우처", "유가보조금"],
   },
   {
     "@context": "https://schema.org",
@@ -87,360 +44,151 @@ const seoSchema = [
     mainEntity: faqItems.map((item) => ({
       "@type": "Question",
       name: item.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.answer,
-      },
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
     })),
   },
 ];
 ---
 
 <BaseLayout
-  title={seoTitle}
-  description={seoDescription}
-  siteName={brandName}
+  title={siteConfig.siteTitle}
+  description={siteConfig.siteDescription}
+  siteName={siteConfig.brandName}
   canonicalUrl={canonicalUrl}
   ogImageUrl={ogImageUrl}
-  locale={locale}
-  schema={seoSchema}
+  locale={siteConfig.locale}
+  schema={schema}
   adsenseClientId={siteConfig.adsenseClientId}
 >
-  <Header brandName={brandName} primaryCtaUrl={primaryCtaUrl} />
+  <Header brandName={siteConfig.brandName} />
 
-  <main id="top" class="mx-auto max-w-6xl px-4 pb-16 pt-28 md:px-6 md:pt-32">
-    <section class="reveal grid gap-8 rounded-[2rem] border border-stone-200/80 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.05)] md:grid-cols-[1.04fr_0.96fr] md:items-center md:p-10">
-      <div>
-        <p class="inline-flex rounded-full bg-stone-100 px-3 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-stone-500">
-          2026년 2차 신청 요약
-        </p>
-        <h1 class="mt-5 max-w-3xl text-4xl font-extrabold leading-[1.08] tracking-[-0.05em] text-stone-900 md:text-6xl">
-          고유가 피해지원금
-          <br />
-          2차 신청 안내
+  <main class="page-shell">
+    <section class="hero reveal">
+      <div class="hero__copy">
+        <span class="eyebrow">오늘의 유가와 에너지비를 한 곳에서</span>
+        <h1>
+          <span>기름값은 매일</span>
+          <span class="hero-line-two"><span>바뀌고, </span><em>절약은 숫자로</em></span>
+          <span>시작됩니다</span>
         </h1>
-        <p class="mt-5 max-w-2xl text-sm leading-7 text-stone-600 md:text-lg md:leading-8">
-          5월 18일부터 시작되는 2차 신청 일정, 소득 하위 70% 기준, 신청 방법, 카드·앱
-          다운로드까지 한 화면에서 빠르게 확인할 수 있도록 정리했습니다.
+        <p class="hero__lede">
+          전국 평균 유가부터 내 차의 월 주유비, 주변 주유소, 지금 신청할 수 있는 에너지 지원까지 필요한 순서대로 확인하세요.
         </p>
-
-        <div class="mt-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          <a
-            href={primaryCtaUrl}
-            class="cta-sheen inline-flex min-h-14 items-center justify-center rounded-full bg-[linear-gradient(135deg,#ea8c4d,#d36e33)] px-6 text-sm font-semibold text-white shadow-[0_16px_32px_rgba(211,110,51,0.2)] transition hover:-translate-y-0.5"
-          >
-            지원 대상 확인
+        <div class="hero__actions">
+          <a class="button button--amber" href="/fuel-cost-calculator/">
+            주유비 계산하기
+            <svg viewBox="0 0 24 24" fill="none"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
-          <a
-            href={secondaryCtaUrl}
-            class="inline-flex min-h-14 items-center justify-center rounded-full border border-stone-200 bg-stone-50 px-6 text-sm font-semibold text-stone-700 transition hover:-translate-y-0.5 hover:bg-white"
-          >
-            신청 방법 보기
-          </a>
-          <a
-            href={phaseTwoGuideUrl}
-            class="inline-flex min-h-14 items-center justify-center rounded-full border border-stone-200 bg-stone-50 px-6 text-sm font-semibold text-stone-700 transition hover:-translate-y-0.5 hover:bg-white"
-          >
-            2차 신청 핵심 보기
-          </a>
-          <a
-            href={appDownloadUrl}
-            class="inline-flex min-h-14 items-center justify-center rounded-full border border-stone-200 bg-stone-50 px-6 text-sm font-semibold text-stone-700 transition hover:-translate-y-0.5 hover:bg-white"
-          >
-            카드·앱 다운로드
-          </a>
+          <a class="button button--light" href="#nearby-stations">내 주변 주유소 찾기</a>
         </div>
-
-        <ul class="mt-7 space-y-3">
-          <li class="flex gap-3 text-sm leading-7 text-stone-600">
-            <span class="mt-2 size-2 rounded-full bg-orange-400"></span>
-            <span>먼저 내가 지원 대상인지 확인</span>
-          </li>
-          <li class="flex gap-3 text-sm leading-7 text-stone-600">
-            <span class="mt-2 size-2 rounded-full bg-orange-400"></span>
-            <span>5월 18일 시작되는 2차 신청 일정과 기준을 확인</span>
-          </li>
-          <li class="flex gap-3 text-sm leading-7 text-stone-600">
-            <span class="mt-2 size-2 rounded-full bg-orange-400"></span>
-            <span>필요하면 카드·앱 다운로드 페이지로 바로 이동</span>
-          </li>
-        </ul>
       </div>
-
-      <div class="relative">
-        <div class="absolute right-8 top-6 h-28 w-28 rounded-full bg-orange-100 blur-3xl"></div>
-        <div class="absolute bottom-10 left-8 h-24 w-24 rounded-full bg-sky-100 blur-3xl"></div>
-
-        <div class="relative overflow-hidden rounded-[1.9rem] border border-stone-200/80 bg-white p-3 shadow-[0_18px_42px_rgba(15,23,42,0.08)]">
-          <img
-            src="/hero-photo.png"
-            alt="서류와 모바일 화면이 놓인 고유가 피해지원금 안내 이미지"
-            class="aspect-[4/5] w-full rounded-[1.5rem] object-cover object-center"
-          />
-
-          <div class="pointer-events-none absolute inset-x-3 bottom-3 rounded-b-[1.5rem] bg-[linear-gradient(180deg,rgba(17,24,39,0),rgba(17,24,39,0.46))] px-5 pb-5 pt-16">
-            <div class="rounded-[1.2rem] border border-white/20 bg-white/88 px-4 py-3 backdrop-blur">
-              <strong class="block text-sm text-stone-900 md:text-base">
-                2차 신청 전 지원 대상과 지급 금액을 먼저 확인하세요
-              </strong>
-            </div>
-          </div>
-
-          <div class="float-soft absolute left-5 top-5 rounded-full border border-stone-200/80 bg-white/95 px-4 py-2 text-xs font-semibold text-stone-700 shadow-sm">
-            5월 18일 2차 신청 시작
-          </div>
+      <div class="hero__visual">
+        <img src="/oilguide-hero.png" alt="해질녘 주유소에서 차량에 주유하는 모습" width="1536" height="1152" fetchpriority="high" />
+        <div class="hero__caption">
+          <span>OILGUIDE QUICK START</span>
+          <strong>오늘 가격을 확인하고<br />내 이동비를 먼저 계산하세요.</strong>
         </div>
       </div>
     </section>
 
-    <section id="summary" class="reveal mt-6 rounded-[2rem] border border-stone-200/80 bg-white p-6 shadow-[0_18px_46px_rgba(15,23,42,0.04)] md:p-8">
+    <FuelPriceBoard />
+
+    <nav class="utility-nav reveal" aria-label="빠른 이동">
+      <a href="#today-price"><b>01</b><strong>오늘의 유가</strong><span>휘발유·경유·LPG</span></a>
+      <a href="/fuel-cost-calculator/"><b>02</b><strong>주유비 계산</strong><span>월·연간 비용 확인</span></a>
+      <a href="#nearby-stations"><b>03</b><strong>주변 주유소</strong><span>내 위치 반경 5km</span></a>
+      <a href="/benefits/"><b>04</b><strong>지원금 찾기</strong><span>에너지·유류비 지원</span></a>
+    </nav>
+
+    <section class="content-section reveal" id="calculator">
+      <FuelCalculator />
+    </section>
+
+    <AdBlock clientId={siteConfig.adsenseClientId} slotId={siteConfig.adsenseSlotId} />
+
+    <section class="content-section reveal">
+      <NearbyStations />
+    </section>
+
+    <section class="content-section reveal" id="benefits">
       <SectionHeading
-        kicker="핵심 안내"
-        title="가장 많이 확인하는 4가지"
-        description="랜딩에서는 클릭을 방해하지 않도록 핵심 이동 경로를 먼저 보여주고, 자세한 내용은 각각의 연결 글에서 더 깊게 확인할 수 있게 구성했습니다."
+        kicker="ENERGY SUPPORT"
+        title="놓치기 쉬운 에너지 지원도 함께 확인하세요"
+        description="현재 신청 가능한 제도와 상시 운영 제도를 구분했습니다. 대상과 기간은 바뀔 수 있으므로 신청 전 공식 안내에서 최종 조건을 확인하세요."
       />
-
-      <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {
-          quickCards.map((item, index) => (
-            <a
-              href={item.href}
-              class="group block rounded-[1.5rem] border border-stone-200/80 bg-stone-50 p-5 transition hover:-translate-y-1 hover:border-orange-200/80 hover:bg-white"
-            >
-              <span class="inline-flex size-10 items-center justify-center rounded-full bg-white text-sm font-bold text-stone-900 shadow-sm">
-                0{index + 1}
-              </span>
-              <strong class="mt-4 block text-lg text-stone-900">{item.title}</strong>
-              <p class="mt-3 text-sm leading-7 text-stone-600">{item.text}</p>
-              <span class="mt-4 inline-flex text-sm font-semibold text-orange-700">
-                {item.cta}
-              </span>
-            </a>
-          ))
-        }
+      <div class="program-list">
+        {supportPrograms.map((program) => (
+          <a class="program-item" href={program.href} target="_blank" rel="noopener noreferrer">
+            <span class="status-chip">{program.status}</span>
+            <div><h3>{program.title}</h3><p>{program.summary}</p></div>
+            <div class="program-date"><span>신청·운영 기간</span><strong>{program.period}</strong></div>
+            <span class="program-arrow" aria-hidden="true">↗</span>
+          </a>
+        ))}
+      </div>
+      <div style="margin-top: 24px">
+        <a class="button button--light" href="/benefits/">지원 제도 한 번에 보기</a>
       </div>
     </section>
 
-    <section id="phase-two" class="reveal mt-6 rounded-[2rem] border border-stone-200/80 bg-[linear-gradient(135deg,#f6fbff,#ffffff)] p-6 shadow-[0_18px_46px_rgba(15,23,42,0.04)] md:p-8">
+    <section class="content-section reveal" id="saving-guides">
       <SectionHeading
-        kicker="2차 신청"
-        title="5월 18일부터 70% 국민 대상 2차 신청 시작"
-        description="정부 공식 안내 기준으로 2차 신청은 2026년 5월 18일부터 시작됩니다. 대상 여부 확인, 일정 파악, 카드·앱 준비 순서로 움직이면 가장 빠르게 대응할 수 있습니다."
+        kicker="PRACTICAL SAVING"
+        title="가격 비교 다음에 챙길 실제 절약 습관"
+        description="멀리 있는 최저가만 좇기보다 내 이동 패턴, 차량 상태, 할인 한도를 함께 보는 것이 꾸준한 절약에 더 효과적입니다."
       />
-
-      <div class="mt-6 grid gap-4 md:grid-cols-3">
-        {
-          phaseTwoHighlights.map((item) => (
-            <article class="rounded-[1.5rem] border border-stone-200/80 bg-white p-5">
-              <p class="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-stone-400">
-                {item.label}
-              </p>
-              <strong class="mt-3 block text-xl text-stone-900">{item.value}</strong>
-              <p class="mt-3 text-sm leading-7 text-stone-600">{item.description}</p>
-            </article>
-          ))
-        }
-      </div>
-
-      <div class="mt-6 rounded-[1.5rem] border border-stone-200/80 bg-white p-5 md:p-6">
-        <div class="grid gap-6 md:grid-cols-[1.15fr_0.85fr] md:items-start">
-          <div>
-            <strong class="block text-lg text-stone-900">상세 글에서는 이런 내용을 더 깊게 볼 수 있습니다</strong>
-            <ul class="mt-4 space-y-3">
-              {
-                phaseTwoPoints.map((point) => (
-                  <li class="flex gap-3 text-sm leading-7 text-stone-600">
-                    <span class="mt-2 size-2 rounded-full bg-orange-400"></span>
-                    <span>{point}</span>
-                  </li>
-                ))
-              }
-            </ul>
-          </div>
-
-          <div class="grid gap-3">
-            <a
-              href={phaseTwoGuideUrl}
-              class="inline-flex min-h-14 items-center justify-center rounded-full bg-[linear-gradient(135deg,#ea8c4d,#d36e33)] px-6 text-sm font-semibold text-white shadow-[0_16px_32px_rgba(211,110,51,0.2)] transition hover:-translate-y-0.5"
-            >
-              2차 신청 상세 내용 보기
-            </a>
-            <a
-              href={primaryCtaUrl}
-              class="inline-flex min-h-14 items-center justify-center rounded-full border border-stone-200 bg-stone-50 px-6 text-sm font-semibold text-stone-700 transition hover:-translate-y-0.5 hover:bg-white"
-            >
-              내 대상 여부 확인하기
-            </a>
-            <a
-              href={appDownloadUrl}
-              class="inline-flex min-h-14 items-center justify-center rounded-full border border-stone-200 bg-stone-50 px-6 text-sm font-semibold text-stone-700 transition hover:-translate-y-0.5 hover:bg-white"
-            >
-              카드·앱 다운로드 바로가기
-            </a>
-          </div>
-        </div>
+      <div class="guide-grid">
+        {savingGuides.map((guide) => (
+          <a class="guide-card" href={guide.href}>
+            <span class="guide-card__number">GUIDE {guide.number}</span>
+            <h3>{guide.title}</h3>
+            <p>{guide.text}</p>
+          </a>
+        ))}
       </div>
     </section>
 
-    {
-      hasAdUnit && (
-        <AdBlock
-          clientId={siteConfig.adsenseClientId}
-          slotId={siteConfig.adsenseSlotId}
-          label="광고"
-          className="mt-6"
-        />
-      )
-    }
+    <AdBlock clientId={siteConfig.adsenseClientId} slotId={siteConfig.adsenseSlotId} />
 
-    <section id="payout" class="reveal mt-6 rounded-[2rem] border border-stone-200/80 bg-white p-6 shadow-[0_18px_46px_rgba(15,23,42,0.04)] md:p-8">
-      <SectionHeading
-        kicker="지급 요약"
-        title="한눈에 보는 지급 기준"
-        description="지급 금액은 지원 대상과 거주 지역에 따라 달라질 수 있습니다. 랜딩에서는 핵심만 보여주고, 세부 기준은 연결된 글에서 더 자세히 확인하도록 구성했습니다."
-      />
-
-      <div class="mt-6 overflow-hidden rounded-[1.5rem] border border-stone-200/80">
-        <div class="grid grid-cols-[1.1fr_0.75fr_1.45fr] bg-stone-100/80 px-5 py-4 text-sm font-semibold text-stone-700">
-          <div>구분</div>
-          <div>금액</div>
-          <div>비고</div>
-        </div>
-        {
-          payoutRows.map((row, index) => (
-            <div class:list={[
-              "grid grid-cols-1 gap-2 px-5 py-4 text-sm leading-7 text-stone-700 md:grid-cols-[1.1fr_0.75fr_1.45fr]",
-              index !== payoutRows.length - 1 && "border-t border-stone-200/80",
-            ]}>
-              <div class="font-semibold text-stone-900">{row.category}</div>
-              <div class="font-semibold text-orange-700">{row.amount}</div>
-              <div class="text-stone-600">{row.note}</div>
-            </div>
-          ))
-        }
+    <aside class="archive reveal">
+      <div>
+        <small>PAST SUPPORT ARCHIVE</small>
+        <h2>종료된 고유가 피해지원금 자료</h2>
+        <p>과거 신청 당시의 기준을 확인하려는 분을 위해 기존 자료는 기록용으로 보존합니다. 현재 신청 가능한 지원으로 오해하지 않도록 종료 자료로 분리했습니다.</p>
       </div>
+      <div class="archive__links">
+        {archivedSupportLinks.map((item) => <a href={item.href}><span>{item.title}</span><span>과거 자료 ↗</span></a>)}
+      </div>
+    </aside>
 
-      <div class="mt-4 flex flex-col gap-3 md:flex-row">
-        <a
-          href={primaryCtaUrl}
-          class="inline-flex min-h-12 items-center justify-center rounded-full bg-[linear-gradient(135deg,#ea8c4d,#d36e33)] px-6 text-sm font-semibold text-white shadow-[0_14px_28px_rgba(211,110,51,0.18)] transition hover:-translate-y-0.5"
-        >
-          지원 대상 자세히 보기
-        </a>
-        <a
-          href={secondaryCtaUrl}
-          class="inline-flex min-h-12 items-center justify-center rounded-full border border-stone-200 bg-stone-50 px-6 text-sm font-semibold text-stone-700 transition hover:-translate-y-0.5 hover:bg-white"
-        >
-          신청 방법 전체 보기
-        </a>
+    <section class="content-section content-section--compact reveal">
+      <SectionHeading kicker="FREQUENTLY ASKED" title="이용 전에 확인해 주세요" />
+      <div class="faq">
+        {faqItems.map((item) => (
+          <details>
+            <summary>{item.question}</summary>
+            <p>{item.answer}</p>
+          </details>
+        ))}
       </div>
     </section>
-
-    <section id="faq" class="reveal mt-6 rounded-[2rem] border border-stone-200/80 bg-white p-6 shadow-[0_18px_46px_rgba(15,23,42,0.04)] md:p-8">
-      <SectionHeading
-        kicker="자주 묻는 질문"
-        title="검색 전에 많이 확인하는 질문"
-        description="2차 신청을 앞두고 많이 확인하는 기준만 간단히 먼저 정리했습니다."
-      />
-
-      <div class="mt-6 space-y-4">
-        {
-          faqItems.map((item) => (
-            <article class="rounded-[1.5rem] border border-stone-200/80 bg-stone-50 px-5 py-4">
-              <h3 class="text-base font-semibold text-stone-900 md:text-lg">{item.question}</h3>
-              <p class="mt-2 text-sm leading-7 text-stone-600 md:text-base">{item.answer}</p>
-            </article>
-          ))
-        }
-      </div>
-    </section>
-
-    <section id="final-cta" class="reveal mt-6 rounded-[2rem] bg-[linear-gradient(135deg,#1f2937,#34485d)] px-6 py-8 text-white shadow-[0_22px_60px_rgba(15,23,42,0.12)] md:px-8 md:py-10">
-      <h2 class="mt-4 max-w-3xl text-3xl font-extrabold leading-tight tracking-[-0.04em] md:text-5xl">
-        먼저 지원 대상부터
-        <br />
-        확인해보세요
-      </h2>
-      <p class="mt-4 max-w-2xl text-sm leading-8 text-white/72 md:text-base">
-        소득 하위 70%, 기초생활수급자, 차상위계층, 한부모가족 기준을 먼저 확인한 뒤 2차
-        신청 일정과 카드·앱 준비로 넘어가는 흐름이 가장 빠릅니다.
-      </p>
-
-      <div class="mt-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <a
-          href={primaryCtaUrl}
-          class="cta-sheen inline-flex min-h-14 items-center justify-center rounded-full bg-[linear-gradient(135deg,#ea8c4d,#d36e33)] px-7 text-sm font-semibold text-white shadow-[0_16px_32px_rgba(211,110,51,0.2)] transition hover:-translate-y-0.5"
-        >
-          지원 대상 확인
-        </a>
-        <a
-          href={secondaryCtaUrl}
-          class="inline-flex min-h-14 items-center justify-center rounded-full border border-white/20 bg-white/10 px-7 text-sm font-semibold text-white/90 transition hover:-translate-y-0.5"
-        >
-          신청 방법 보기
-        </a>
-        <a
-          href={phaseTwoGuideUrl}
-          class="inline-flex min-h-14 items-center justify-center rounded-full border border-white/20 bg-white/10 px-7 text-sm font-semibold text-white/90 transition hover:-translate-y-0.5"
-        >
-          2차 신청 핵심 보기
-        </a>
-        <a
-          href={appDownloadUrl}
-          class="inline-flex min-h-14 items-center justify-center rounded-full border border-white/20 bg-white/10 px-7 text-sm font-semibold text-white/90 transition hover:-translate-y-0.5"
-        >
-          카드·앱 다운로드
-        </a>
-      </div>
-    </section>
-
-    {
-      hasAdUnit && (
-        <AdBlock
-          clientId={siteConfig.adsenseClientId}
-          slotId={siteConfig.adsenseSlotId}
-          label="광고"
-          className="mt-6"
-        />
-      )
-    }
   </main>
 
-  <Footer brandName={brandName} ownerName={ownerName} supportEmail={supportEmail} />
-
-  <div class="fixed inset-x-4 bottom-4 z-40 rounded-[1.3rem] border border-stone-200/80 bg-white/95 p-3 shadow-[0_16px_34px_rgba(15,23,42,0.12)] xl:hidden">
-    <div class="flex items-center gap-3">
-      <div class="min-w-0 flex-1">
-        <strong class="block text-sm text-stone-900">모바일 빠른 이동</strong>
-        <p class="mt-1 truncate text-xs text-stone-500">먼저 지원 대상 여부를 확인하세요</p>
-      </div>
-      <a
-        href={primaryCtaUrl}
-        class="cta-sheen inline-flex min-h-11 items-center justify-center rounded-full bg-[linear-gradient(135deg,#ea8c4d,#d36e33)] px-5 text-sm font-semibold text-white"
-      >
-        대상 확인
-      </a>
-    </div>
-  </div>
+  <Footer brandName={siteConfig.brandName} ownerName={siteConfig.ownerName} supportEmail={siteConfig.supportEmail} />
 
   <script is:inline>
-    const revealElements = document.querySelectorAll(".reveal");
-
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) {
-      const revealObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            entry.target.classList.add("is-visible");
-            revealObserver.unobserve(entry.target);
-          });
-        },
-        { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
-      );
-
-      revealElements.forEach((element) => revealObserver.observe(element));
+    const revealItems = document.querySelectorAll(".reveal");
+    if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: 0.08, rootMargin: "0px 0px -6% 0px" });
+      revealItems.forEach((item) => observer.observe(item));
     } else {
-      revealElements.forEach((element) => element.classList.add("is-visible"));
+      revealItems.forEach((item) => item.classList.add("is-visible"));
     }
   </script>
 </BaseLayout>

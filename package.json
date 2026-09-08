@@ -10,9 +10,10 @@
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "12",
+    "@astrojs/cloudflare": "^14.3.1",
     "@astrojs/sitemap": "^3.7.2",
-    "astro": "^5.14.0"
+    "astro": "^7.3.2",
+    "leaflet": "^1.9.4"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.12",

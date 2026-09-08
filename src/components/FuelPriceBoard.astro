@@ -1,0 +1,59 @@
+---
+import { fuelFallback } from "../data/portal.js";
+const formatter = new Intl.NumberFormat("ko-KR", { maximumFractionDigits: 0 });
+---
+
+<section class="price-board" id="today-price" aria-label="전국 평균 유가">
+  <div class="price-board__meta">
+    <span>전국 평균 유가</span>
+    <strong>오늘의 기름값</strong>
+    <small data-price-status>최근 확인값 · 2026.09.09</small>
+  </div>
+  {fuelFallback.map((fuel) => (
+    <div class="price-item" data-fuel-code={fuel.code}>
+      <span>{fuel.shortName}</span>
+      <strong><b data-price-value>{formatter.format(fuel.price)}</b><small>원/L</small></strong>
+      <em data-price-diff>오피넷 기준 참고값</em>
+    </div>
+  ))}
+</section>
+
+<script>
+  const board = document.querySelector(".price-board");
+  if (board) {
+    fetch("/api/fuel-prices.json")
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then((payload) => {
+        if (!Array.isArray(payload.fuels)) return;
+        payload.fuels.forEach((fuel) => {
+          const item = board.querySelector(`[data-fuel-code="${fuel.code}"]`);
+          if (!item) return;
+          const value = item.querySelector("[data-price-value]");
+          const diff = item.querySelector("[data-price-diff]");
+          if (value) value.textContent = new Intl.NumberFormat("ko-KR", { maximumFractionDigits: 0 }).format(fuel.price);
+          if (diff) {
+            const direction = fuel.diff > 0 ? "▲" : fuel.diff < 0 ? "▼" : "－";
+            diff.textContent = `전일 대비 ${direction} ${Math.abs(fuel.diff).toFixed(2)}원`;
+          }
+        });
+        const status = board.querySelector("[data-price-status]");
+        if (status) {
+          const date = payload.tradeDate
+            ? `${payload.tradeDate.slice(0, 4)}.${payload.tradeDate.slice(4, 6)}.${payload.tradeDate.slice(6, 8)}`
+            : new Date(payload.updatedAt).toLocaleDateString("ko-KR");
+          status.textContent = `${payload.live ? "오피넷 실시간 연동" : "최근 확인값"} · ${date}`;
+        }
+        const gasoline = payload.fuels.find((fuel) => fuel.code === "B027");
+        document.querySelectorAll("[data-sync-fuel-price]").forEach((input) => {
+          if (gasoline && input instanceof HTMLInputElement && !input.dataset.touched) {
+            input.value = String(Math.round(gasoline.price));
+            input.dispatchEvent(new Event("input", { bubbles: true }));
+          }
+        });
+      })
+      .catch(() => {
+        const status = board.querySelector("[data-price-status]");
+        if (status) status.textContent = "가격 데이터 확인 지연 · 오피넷 참고";
+      });
+  }
+</script>

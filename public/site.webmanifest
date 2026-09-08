@@ -1,11 +1,12 @@
 {
-  "name": "고유가 피해지원금 정보센터",
-  "short_name": "고유가 지원금",
+  "name": "오일가이드 - 기름값·에너지비 절약센터",
+  "short_name": "오일가이드",
+  "description": "오늘의 유가, 주유비 계산, 주변 주유소와 에너지 지원 정보를 확인하세요.",
   "lang": "ko-KR",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f7f3ec",
-  "theme_color": "#f7f3ec",
+  "background_color": "#f7f4ec",
+  "theme_color": "#0d3034",
   "icons": [
     {
       "src": "/favicon.svg",

@@ -1,20 +1,21 @@
-# 고유가 피해지원금 정보센터
+# 오일가이드
 
-> 고유가 피해지원금 지원 대상, 소득 하위 70% 기준, 신청 방법, 카드·앱 다운로드 안내를 연결하는 한국어 랜딩페이지입니다.
+> 대한민국의 기름값, 주유비 계산, 주변 주유소와 에너지·유류비 지원 제도를 함께 안내하는 한국어 생활정보 서비스입니다.
 
 Preferred URL: https://oilguide.infoarounds.com/
 Language: ko-KR
+Last updated: 2026-09-09
 Contact: mailto:ttugttagi01@gmail.com
 
-## Primary page
-- https://oilguide.infoarounds.com/
+## Core pages
+- 홈 및 전국 평균 유가: https://oilguide.infoarounds.com/
+- 주유비 계산기: https://oilguide.infoarounds.com/fuel-cost-calculator/
+- 에너지·유류비 지원: https://oilguide.infoarounds.com/benefits/
+- 종료된 2026 고유가 피해지원금 자료: https://oilguide.infoarounds.com/archive/high-oil-support-2026/
 
-## Related resources
-- 지원 대상 확인: https://infoarounds.com/2025-%eb%b3%b5%ec%a7%80%ec%a0%95%eb%b3%b4/bottom-70-income-criteria-calculator/
-- 신청 방법 보기: https://infoarounds.com/2025-%eb%b3%b5%ec%a7%80%ec%a0%95%eb%b3%b4/2026-high-oil-price-support-guide-2/
-- 카드·앱 다운로드: https://infoarounds.com/%ec%9d%bc%ec%83%81%ec%86%8d-%ed%95%84%ec%9a%94%ec%a0%95%eb%b3%b4/card-app-download/
-
-## Summary
-- 고유가 피해지원금의 핵심은 먼저 지원 대상 여부를 확인하고, 이후 신청 방법과 지급 수단을 확인하는 것입니다.
-- 주요 대상은 기초생활수급자, 차상위계층, 한부모가족, 소득 하위 70% 국민입니다.
-- 지급 금액은 대상 및 거주 지역에 따라 최소 10만 원부터 최대 60만 원까지 달라질 수 있습니다.
+## Data and editorial policy
+- 전국 평균 유가는 한국석유공사 오피넷의 공식 유가정보 API를 기준으로 합니다.
+- 주변 주유소 위치는 OpenStreetMap 공개 데이터를 사용합니다.
+- 계산기 결과는 사용자가 입력한 거리, 연비, 유가에 따른 예상값입니다.
+- 지원 제도는 공식 기관 안내를 우선하며 신청 전 원문 확인을 권장합니다.
+- 종료된 지원 제도는 현재 신청 정보와 구분하여 보존합니다.

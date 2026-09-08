@@ -1,0 +1,106 @@
+---
+const { compact = false } = Astro.props;
+---
+
+<section class:list={["calculator-shell", compact && "calculator-shell--compact"]} data-fuel-calculator>
+  <div class="calculator-intro">
+    <div class="section-heading">
+      <p>FUEL COST CALCULATOR</p>
+      <h2>이번 달 주유비,<br />미리 계산해 보세요</h2>
+      <div class="section-heading__description">
+        이동거리와 내 차의 실연비만 알면 하루, 한 달, 1년 예상 연료비를 바로 비교할 수 있습니다.
+      </div>
+    </div>
+    <div class="calculator-intro__example">
+      <span>계산식</span>
+      <strong>거리 ÷ 연비 × 리터당 가격</strong>
+      <p class="fine-print">통행료, 주차비, 차량 유지비는 포함하지 않습니다.</p>
+    </div>
+  </div>
+
+  <form class="calculator-form" onsubmit="return false">
+    <div class="field-grid">
+      <label class="field">
+        <span>편도 이동거리</span>
+        <span class="input-wrap"><input name="distance" type="number" min="0.1" step="0.1" value="21" inputmode="decimal" /><i>km</i></span>
+      </label>
+      <label class="field">
+        <span>차량 실연비</span>
+        <span class="input-wrap"><input name="efficiency" type="number" min="1" step="0.1" value="12.5" inputmode="decimal" /><i>km/L</i></span>
+      </label>
+      <label class="field">
+        <span>리터당 유가</span>
+        <span class="input-wrap"><input name="price" type="number" min="1" step="1" value="1859" inputmode="numeric" data-sync-fuel-price /><i>원</i></span>
+      </label>
+      <label class="field">
+        <span>월 이동일수</span>
+        <span class="input-wrap"><input name="days" type="number" min="1" max="31" step="1" value="20" inputmode="numeric" /><i>일</i></span>
+      </label>
+      <label class="field field--wide">
+        <span>비용을 나눌 인원</span>
+        <span class="input-wrap"><input name="people" type="number" min="1" max="20" step="1" value="1" inputmode="numeric" /><i>명</i></span>
+      </label>
+    </div>
+
+    <div class="calculator-result" aria-live="polite">
+      <div class="calculator-result__main">
+        <div><span>예상 월 주유비</span><strong data-result-month>124,925원</strong></div>
+        <div class="trip-toggle" aria-label="이동 방식">
+          <button type="button" data-trip="1" aria-pressed="false">편도만</button>
+          <button type="button" data-trip="2" aria-pressed="true">왕복</button>
+        </div>
+      </div>
+      <div class="calculator-result__stats">
+        <div><span>하루</span><strong data-result-day>6,246원</strong></div>
+        <div><span>1년</span><strong data-result-year>1,499,098원</strong></div>
+        <div><span>1인당 월</span><strong data-result-person>124,925원</strong></div>
+      </div>
+    </div>
+    <p class="fine-print">입력값을 바꾸면 결과가 즉시 반영됩니다. 실제 주유비는 교통상황과 차량 상태에 따라 달라질 수 있습니다.</p>
+  </form>
+</section>
+
+<script>
+  document.querySelectorAll("[data-fuel-calculator]").forEach((calculator) => {
+    if (!(calculator instanceof HTMLElement) || calculator.dataset.ready) return;
+    calculator.dataset.ready = "true";
+    const form = calculator.querySelector("form");
+    if (!(form instanceof HTMLFormElement)) return;
+    let tripMultiplier = 2;
+    const format = (value) => `${new Intl.NumberFormat("ko-KR", { maximumFractionDigits: 0 }).format(Math.round(value))}원`;
+    const calculate = () => {
+      const data = new FormData(form);
+      const distance = Math.max(Number(data.get("distance")) || 0, 0);
+      const efficiency = Math.max(Number(data.get("efficiency")) || 1, 1);
+      const price = Math.max(Number(data.get("price")) || 0, 0);
+      const days = Math.max(Number(data.get("days")) || 0, 0);
+      const people = Math.max(Number(data.get("people")) || 1, 1);
+      const day = (distance * tripMultiplier / efficiency) * price;
+      const month = day * days;
+      const targets = {
+        "[data-result-day]": day,
+        "[data-result-month]": month,
+        "[data-result-year]": month * 12,
+        "[data-result-person]": month / people,
+      };
+      Object.entries(targets).forEach(([selector, value]) => {
+        const target = calculator.querySelector(selector);
+        if (target) target.textContent = format(value);
+      });
+    };
+    form.addEventListener("input", (event) => {
+      if (event.target instanceof HTMLInputElement && event.target.hasAttribute("data-sync-fuel-price")) {
+        event.target.dataset.touched = "true";
+      }
+      calculate();
+    });
+    calculator.querySelectorAll("[data-trip]").forEach((button) => {
+      button.addEventListener("click", () => {
+        tripMultiplier = Number(button.getAttribute("data-trip")) || 2;
+        calculator.querySelectorAll("[data-trip]").forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        calculate();
+      });
+    });
+    calculate();
+  });
+</script>

@@ -10,5 +10,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   integrations: [sitemap()],
-  adapter: cloudflare()
+  adapter: cloudflare({
+    imageService: "compile"
+  })
 });

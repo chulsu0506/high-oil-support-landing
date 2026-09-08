@@ -1,50 +1,21 @@
 ---
-const { brandName, primaryCtaUrl } = Astro.props;
+const { brandName = "오일가이드" } = Astro.props;
 ---
 
-<header class="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-6">
-  <div class="mx-auto flex max-w-6xl items-center justify-between rounded-full border border-stone-200/80 bg-white/92 px-4 py-3 shadow-[0_12px_30px_rgba(15,23,42,0.06)] backdrop-blur md:px-6">
-    <a href="/" class="flex items-center gap-3">
-      <span class="grid size-10 place-items-center rounded-full bg-[linear-gradient(135deg,#fff1df,#ffd7b4)]">
-        <span class="size-4 rounded-full bg-[linear-gradient(135deg,#f4a261,#d9773b)]"></span>
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="/" class="brand" aria-label={`${brandName} 홈`}>
+      <span class="brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none"><path d="M16 3.5c-5.6 7-9.5 12-9.5 17.1a9.5 9.5 0 0 0 19 0C25.5 15.5 21.6 10.5 16 3.5Z" fill="currentColor"/><path d="M11.7 21.5c.7 2.2 2.4 3.6 4.7 3.8" stroke="#FFF7E8" stroke-width="2.2" stroke-linecap="round"/></svg>
       </span>
-      <div>
-        <strong class="block text-sm text-stone-900 md:text-base">{brandName}</strong>
-      </div>
+      <span><strong>{brandName}</strong><small>FUEL &amp; ENERGY GUIDE</small></span>
     </a>
-
-    <nav class="hidden items-center gap-2 md:flex">
-      <a
-        class="rounded-full px-4 py-2 text-sm text-stone-600 transition hover:bg-stone-100 hover:text-stone-900"
-        href="/#summary"
-      >
-        핵심 안내
-      </a>
-      <a
-        class="rounded-full px-4 py-2 text-sm text-stone-600 transition hover:bg-stone-100 hover:text-stone-900"
-        href="/#phase-two"
-      >
-        2차 신청
-      </a>
-      <a
-        class="rounded-full px-4 py-2 text-sm text-stone-600 transition hover:bg-stone-100 hover:text-stone-900"
-        href="/#payout"
-      >
-        지급 요약
-      </a>
-      <a
-        class="inline-flex min-h-11 items-center justify-center rounded-full bg-[linear-gradient(135deg,#ea8c4d,#d36e33)] px-5 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(211,110,51,0.22)] transition hover:-translate-y-0.5"
-        href={primaryCtaUrl}
-      >
-        지원 대상 확인
-      </a>
+    <nav class="desktop-nav" aria-label="주요 메뉴">
+      <a href="/#today-price">오늘의 유가</a>
+      <a href="/fuel-cost-calculator/">주유비 계산</a>
+      <a href="/#nearby-stations">주변 주유소</a>
+      <a href="/benefits/">지원금</a>
     </nav>
-
-    <a
-      class="inline-flex min-h-10 items-center justify-center rounded-full bg-[linear-gradient(135deg,#ea8c4d,#d36e33)] px-4 text-sm font-semibold text-white shadow-[0_10px_22px_rgba(211,110,51,0.2)] md:hidden"
-      href={primaryCtaUrl}
-    >
-      대상 확인
-    </a>
+    <a class="header-action" href="/fuel-cost-calculator/">내 주유비 계산</a>
   </div>
 </header>

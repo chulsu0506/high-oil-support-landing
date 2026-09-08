@@ -2,10 +2,10 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import { siteConfig } from "../data/landing.js";
+import { siteConfig } from "../data/portal.js";
 
-const title = "이용약관 | 고유가 피해지원금 정보센터";
-const description = "고유가 피해지원금 정보센터의 서비스 이용 기준과 면책 사항을 안내합니다.";
+const title = "이용약관 | 오일가이드";
+const description = "오일가이드의 유가정보, 계산기, 지도, 외부 지원정보 이용 기준과 면책 사항을 안내합니다.";
 const canonicalUrl = `${siteConfig.siteUrl}/terms`;
 
 const schema = {
@@ -27,24 +27,17 @@ const schema = {
   schema={schema}
   adsenseClientId={siteConfig.adsenseClientId}
 >
-  <Header brandName={siteConfig.brandName} primaryCtaUrl={siteConfig.primaryCtaUrl} />
+  <Header brandName={siteConfig.brandName} />
 
-  <main class="mx-auto max-w-4xl px-4 pb-16 pt-28 md:px-6 md:pt-32">
-    <section class="rounded-[2rem] border border-stone-200/80 bg-white p-6 shadow-[0_18px_46px_rgba(15,23,42,0.04)] md:p-8">
-      <p class="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-stone-400">
-        terms
-      </p>
-      <h1 class="mt-4 text-3xl font-extrabold tracking-[-0.04em] text-stone-900 md:text-5xl">
-        이용약관
-      </h1>
-      <div class="mt-6 space-y-6 text-sm leading-8 text-stone-600 md:text-base">
+  <main class="page-shell">
+    <section class="legal-card">
+      <h1>이용약관</h1>
+      <div>
         <p>
-          본 사이트는 고유가 피해지원금 관련 정보를 안내하고, 외부 가이드 및 다운로드 페이지로
-          연결하는 허브형 랜딩페이지입니다.
+          오일가이드는 공개된 유가 정보, 주유비 계산, 주변 주유소 위치, 에너지 지원 제도를 이용하기 쉽게 정리하는 생활정보 서비스입니다.
         </p>
         <p>
-          사이트에 제공되는 정보는 이용자의 이해를 돕기 위한 요약 안내이며, 최종 신청 기준 및 지급
-          세부 조건은 관계 기관의 공식 발표와 연결된 상세 안내 페이지를 반드시 함께 확인해야 합니다.
+          유가와 주유소 정보는 제공처의 갱신 시점에 따라 실제 현장과 차이가 날 수 있습니다. 계산 결과는 입력값에 따른 예상치이며 실제 결제액이나 절약액을 보장하지 않습니다.
         </p>
         <p>
           운영자는 본 사이트의 정보 정확성을 위해 노력하지만, 정책 변경, 일정 변경, 외부 사이트
