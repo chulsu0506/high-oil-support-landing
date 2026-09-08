@@ -28,15 +28,31 @@ export async function GET({ url }) {
 
   const query = `[out:json][timeout:18];(node["amenity"="fuel"](around:5000,${lat},${lon});way["amenity"="fuel"](around:5000,${lat},${lon});relation["amenity"="fuel"](around:5000,${lat},${lon}););out center tags;`;
   try {
-    const response = await fetch("https://overpass-api.de/api/interpreter", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-        "User-Agent": "OilGuide/1.0 (oilguide.infoarounds.com; ttugttagi01@gmail.com)",
-      },
-      body: new URLSearchParams({ data: query }),
-    });
-    if (!response.ok) throw new Error("Map data unavailable");
+    const mirrors = [
+      "https://overpass.kumi.systems/api/interpreter",
+      "https://overpass-api.de/api/interpreter",
+    ];
+    let response;
+    for (const endpoint of mirrors) {
+      try {
+        const candidate = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+          },
+          body: new URLSearchParams({ data: query }),
+          signal: AbortSignal.timeout(15000),
+        });
+        if (candidate.ok) {
+          response = candidate;
+          break;
+        }
+      } catch {
+        // Try the next public mirror when one is busy or rejects Worker traffic.
+      }
+    }
+    if (!response) throw new Error("Map data unavailable");
     const payload = await response.json();
     const stations = (payload.elements || [])
       .map((item) => {
