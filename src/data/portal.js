@@ -12,6 +12,7 @@ export const siteConfig = {
   updatedAt: "2026-09-09",
   adsenseClientId: "ca-pub-6067163195544027",
   adsenseSlotId: "3408440776",
+  kakaoJavaScriptKey: "2590efd5d8faf6f739dc287417e44d4b",
 };
 
 export const fuelFallback = [
@@ -236,7 +237,7 @@ export const faqItems = [
   },
   {
     question: "내 주변 주유소 지도에 가격도 나오나요?",
-    answer: "주유소 위치는 공개 지도 데이터를 이용합니다. 판매가격은 오피넷 데이터가 연결된 경우에만 표시하며, 최종 가격과 영업 여부는 방문 전 해당 주유소 또는 오피넷에서 다시 확인하는 것이 안전합니다.",
+    answer: "지도와 길찾기는 카카오맵을 사용하고 판매가격은 한국석유공사 오피넷 데이터를 표시합니다. 최종 가격과 영업 여부는 방문 전 해당 주유소 또는 오피넷에서 다시 확인하는 것이 안전합니다.",
   },
   {
     question: "주유비 계산 결과는 실제 결제액과 같은가요?",

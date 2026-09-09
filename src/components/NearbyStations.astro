@@ -1,153 +1,310 @@
-<section class="map-shell" id="nearby-stations">
+---
+import { siteConfig } from "../data/portal.js";
+---
+
+<section class="map-shell" id="nearby-stations" data-kakao-key={siteConfig.kakaoJavaScriptKey}>
   <div class="map-shell__head">
     <div class="map-heading-row">
       <div class="section-heading section-heading--inverse">
         <p>NEARBY STATIONS</p>
-        <h2>위치 허용 없이도<br />주변 주유소를 찾으세요</h2>
-        <div class="section-heading__description">지역을 직접 고르거나 현재 위치를 사용할 수 있습니다. 오피넷이 제공하는 판매가격과 거리를 함께 비교하세요.</div>
+        <h2>주소로 찾고,<br />바로 길안내 받으세요</h2>
+        <div class="section-heading__description">동네나 주소를 검색하거나 현재 위치를 사용할 수 있습니다. 오피넷 판매가격을 비교한 뒤 카카오맵 길찾기로 바로 이어집니다.</div>
       </div>
       <button class="button button--amber" type="button" data-find-stations>
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s7-5.3 7-12a7 7 0 1 0-14 0c0 6.7 7 12 7 12Z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="9" r="2.4" stroke="currentColor" stroke-width="1.8"/></svg>
         내 위치로 찾기
       </button>
     </div>
-    <form class="map-search" data-region-form>
-      <label>
-        <span>지역 선택</span>
-        <select data-region-select>
-          <option value="37.5665,126.9780">서울 중심</option>
-          <option value="35.1796,129.0756">부산 중심</option>
-          <option value="35.8714,128.6014">대구 중심</option>
-          <option value="37.4563,126.7052">인천 중심</option>
-          <option value="35.1595,126.8526">광주 중심</option>
-          <option value="36.3504,127.3845">대전 중심</option>
-          <option value="35.5395,129.3114">울산 중심</option>
-          <option value="36.4800,127.2890">세종 중심</option>
-          <option value="37.2636,127.0286">수원 중심</option>
-          <option value="37.8813,127.7300">춘천 중심</option>
-          <option value="36.6424,127.4890">청주 중심</option>
-          <option value="35.8242,127.1480">전주 중심</option>
-          <option value="34.9904,126.4817">무안·전남 중심</option>
-          <option value="36.5684,128.7294">안동·경북 중심</option>
-          <option value="35.2285,128.6811">창원 중심</option>
-          <option value="33.4996,126.5312">제주 중심</option>
-        </select>
+
+    <div class="fuel-tabs" role="group" aria-label="유종 선택">
+      <button type="button" data-product="B027" aria-pressed="true">휘발유</button>
+      <button type="button" data-product="D047" aria-pressed="false">경유</button>
+      <button type="button" data-product="K015" aria-pressed="false">LPG</button>
+    </div>
+
+    <form class="map-search" data-address-form>
+      <label class="map-search__field">
+        <span>지역·주소 검색</span>
+        <input type="search" autocomplete="street-address" placeholder="예: 성수동, 수원역, 제주 애월읍" data-address-input />
       </label>
-      <label>
-        <span>유종</span>
-        <select data-product-select>
-          <option value="B027">휘발유</option>
-          <option value="D047">경유</option>
-          <option value="K015">LPG</option>
-        </select>
-      </label>
-      <button class="button map-search__submit" type="submit">선택 지역 검색</button>
+      <button class="button map-search__submit" type="submit">이 지역 검색</button>
     </form>
+
+    <div class="region-shortcuts" aria-label="주요 지역 빠른 검색">
+      <span>빠른 선택</span>
+      <button type="button" data-region="37.5665,126.9780,01,서울">서울</button>
+      <button type="button" data-region="35.1796,129.0756,02,부산">부산</button>
+      <button type="button" data-region="35.8714,128.6014,03,대구">대구</button>
+      <button type="button" data-region="37.4563,126.7052,04,인천">인천</button>
+      <button type="button" data-region="35.1595,126.8526,05,광주">광주</button>
+      <button type="button" data-region="36.3504,127.3845,06,대전">대전</button>
+      <button type="button" data-region="33.4996,126.5312,16,제주">제주</button>
+    </div>
   </div>
+
   <div class="map-content">
-    <div id="station-map" role="application" aria-label="주변 주유소 지도"></div>
+    <div class="map-stage">
+      <div id="station-map" role="application" aria-label="카카오맵 주변 주유소 지도"></div>
+      <div class="map-brand-note">지도·길찾기 제공 Kakao</div>
+    </div>
     <aside class="map-panel">
-      <div class="map-status" data-map-status>지역을 선택하거나 내 위치를 사용하면 반경 5km의 주유소를 가격순으로 보여드립니다.</div>
-      <button class="map-center-button" type="button" data-center-search>지금 보이는 지도 중심에서 찾기</button>
+      <div class="map-status" data-map-status>주소나 지역을 검색하면 선택한 유종의 반경 5km 판매가격을 보여드립니다.</div>
+      <button class="map-center-button" type="button" data-center-search>지금 보이는 지도 중심에서 다시 찾기</button>
       <div class="station-list" data-station-list></div>
     </aside>
   </div>
 </section>
 
 <script>
-  import L from "leaflet";
-  import "leaflet/dist/leaflet.css";
-
+  const shell = document.querySelector("#nearby-stations");
   const mapElement = document.querySelector("#station-map");
   const findButton = document.querySelector("[data-find-stations]");
   const centerButton = document.querySelector("[data-center-search]");
-  const regionForm = document.querySelector("[data-region-form]");
-  const regionSelect = document.querySelector("[data-region-select]");
-  const productSelect = document.querySelector("[data-product-select]");
+  const addressForm = document.querySelector("[data-address-form]");
+  const addressInput = document.querySelector("[data-address-input]");
+  const productButtons = document.querySelectorAll("[data-product]");
+  const regionButtons = document.querySelectorAll("[data-region]");
   const status = document.querySelector("[data-map-status]");
   const list = document.querySelector("[data-station-list]");
 
-  if (mapElement instanceof HTMLElement && findButton instanceof HTMLButtonElement && centerButton instanceof HTMLButtonElement && regionForm instanceof HTMLFormElement && regionSelect instanceof HTMLSelectElement && productSelect instanceof HTMLSelectElement && status && list) {
-    const map = L.map(mapElement, { scrollWheelZoom: false }).setView([36.45, 127.85], 7);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }).addTo(map);
-    const stationLayer = L.layerGroup().addTo(map);
-    const stationIcon = L.divIcon({ className: "station-marker", html: "O", iconSize: [34, 34] });
-    const userIcon = L.divIcon({ className: "user-marker", html: "", iconSize: [20, 20] });
-    const productNames = { B027: "휘발유", D047: "경유", K015: "LPG" };
+  const regionCodes = {
+    "서울특별시": "01", "부산광역시": "02", "대구광역시": "03", "인천광역시": "04",
+    "광주광역시": "05", "대전광역시": "06", "울산광역시": "07", "경기도": "08",
+    "강원특별자치도": "09", "강원도": "09", "충청북도": "10", "충청남도": "11",
+    "전북특별자치도": "12", "전라북도": "12", "전라남도": "13", "경상북도": "14",
+    "경상남도": "15", "제주특별자치도": "16", "세종특별자치시": "17",
+  };
+  const productNames = { B027: "휘발유", D047: "경유", K015: "LPG" };
 
+  const loadKakaoMaps = (key) => new Promise((resolve, reject) => {
+    if (window.kakao?.maps) {
+      window.kakao.maps.load(resolve);
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${encodeURIComponent(key)}&autoload=false&libraries=services`;
+    script.async = true;
+    script.onload = () => window.kakao?.maps?.load(resolve);
+    script.onerror = () => reject(new Error("Kakao Maps SDK unavailable"));
+    document.head.appendChild(script);
+  });
+
+  if (shell instanceof HTMLElement && mapElement instanceof HTMLElement && findButton instanceof HTMLButtonElement && centerButton instanceof HTMLButtonElement && addressForm instanceof HTMLFormElement && addressInput instanceof HTMLInputElement && status && list) {
+    const kakaoKey = shell.dataset.kakaoKey || "";
     const setStatus = (message) => { status.textContent = message; };
     const escapeHtml = (value) => String(value || "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
     const formatPrice = (price) => Number(price).toLocaleString("ko-KR");
+    let activeProduct = "B027";
+    let lastSearch = null;
+    let map;
+    let geocoder;
+    let places;
+    let overlays = [];
+
+    const setBusy = (busy) => {
+      findButton.disabled = busy;
+      centerButton.disabled = busy;
+      productButtons.forEach((button) => { button.disabled = busy; });
+      regionButtons.forEach((button) => { button.disabled = busy; });
+    };
+
+    const clearOverlays = () => {
+      overlays.forEach((overlay) => overlay.setMap(null));
+      overlays = [];
+    };
+
+    const resolveAreaCode = (lat, lon) => new Promise((resolve) => {
+      geocoder.coord2RegionCode(lon, lat, (result, resultStatus) => {
+        if (resultStatus !== window.kakao.maps.services.Status.OK) {
+          resolve("");
+          return;
+        }
+        const region = result.find((item) => item.region_type === "H") || result[0];
+        resolve(regionCodes[region?.region_1depth_name] || "");
+      });
+    });
+
+    const focusStation = (station, overlay) => {
+      map.setLevel(3);
+      map.panTo(new window.kakao.maps.LatLng(station.lat, station.lon));
+      const content = overlay.getContent();
+      if (content instanceof HTMLElement) {
+        content.classList.add("is-active");
+        window.setTimeout(() => content.classList.remove("is-active"), 900);
+      }
+    };
 
     const renderStations = (payload, lat, lon, locationName) => {
-      const stations = payload.stations || [];
+      const stations = (payload.stations || []).slice(0, 20);
       const productName = productNames[payload.product] || "선택 유종";
-      stationLayer.clearLayers();
-      L.marker([lat, lon], { icon: userIcon, zIndexOffset: 1000 }).addTo(stationLayer).bindPopup(`${escapeHtml(locationName)} 검색 기준`);
+      clearOverlays();
       list.innerHTML = "";
 
-      stations.slice(0, 12).forEach((station, index) => {
+      const bounds = new window.kakao.maps.LatLngBounds();
+      const originPosition = new window.kakao.maps.LatLng(lat, lon);
+      bounds.extend(originPosition);
+      const originNode = document.createElement("div");
+      originNode.className = "kakao-origin-marker";
+      originNode.setAttribute("aria-label", `${locationName} 검색 기준`);
+      const originOverlay = new window.kakao.maps.CustomOverlay({ position: originPosition, content: originNode, yAnchor: 0.5, zIndex: 5 });
+      originOverlay.setMap(map);
+      overlays.push(originOverlay);
+
+      if (!stations.length) {
+        list.innerHTML = `<div class="station-empty"><strong>${escapeHtml(productName)} 판매점이 검색되지 않았습니다.</strong><span>지도를 조금 이동한 뒤 다시 찾거나 다른 지역을 검색해 보세요.</span></div>`;
+        map.setCenter(originPosition);
+        map.setLevel(6);
+        setStatus(`${locationName} 기준으로 확인 가능한 ${productName} 판매점이 없습니다.`);
+        return;
+      }
+
+      stations.forEach((station, index) => {
+        const position = new window.kakao.maps.LatLng(station.lat, station.lon);
+        bounds.extend(position);
+        const markerNode = document.createElement("button");
+        markerNode.type = "button";
+        markerNode.className = "kakao-station-marker";
+        markerNode.textContent = String(index + 1);
+        markerNode.setAttribute("aria-label", `${station.name} 지도에서 보기`);
+        const overlay = new window.kakao.maps.CustomOverlay({ position, content: markerNode, yAnchor: 1.15, zIndex: 4 });
+        overlay.setMap(map);
+        overlays.push(overlay);
+        markerNode.addEventListener("click", () => focusStation(station, overlay));
+
         const priceText = station.price ? `${formatPrice(station.price)}원/L` : "가격 확인 필요";
-        const marker = L.marker([station.lat, station.lon], { icon: stationIcon }).addTo(stationLayer);
-        marker.bindPopup(`<strong>${escapeHtml(station.name)}</strong><br><small>${escapeHtml(station.brand || "주유소")} · ${priceText}</small>`);
+        const distanceText = Number.isFinite(Number(station.distanceKm)) ? `약 ${Number(station.distanceKm).toFixed(1)}km` : "거리 확인 필요";
+        const routeUrl = `https://map.kakao.com/link/to/${encodeURIComponent(station.name)},${station.lat},${station.lon}`;
+        const mapUrl = `https://map.kakao.com/link/map/${encodeURIComponent(station.name)},${station.lat},${station.lon}`;
         const item = document.createElement("article");
         item.className = "station-item";
-        item.innerHTML = `<div><strong>${index + 1}. ${escapeHtml(station.name)}</strong><span>${escapeHtml(station.brand || "브랜드 정보 없음")} · 약 ${Number(station.distanceKm).toFixed(1)}km</span></div><b>${priceText}</b>`;
-        item.addEventListener("click", () => { map.setView([station.lat, station.lon], 16); marker.openPopup(); });
+        item.innerHTML = `
+          <button class="station-item__main" type="button">
+            <span class="station-rank">${index + 1}</span>
+            <span class="station-copy"><strong>${escapeHtml(station.name)}</strong><small>${escapeHtml(station.brand || "브랜드 정보 없음")} · ${distanceText}</small></span>
+            <b>${priceText}</b>
+          </button>
+          <div class="station-item__actions">
+            <a href="${mapUrl}" target="_blank" rel="noopener noreferrer">지도 보기</a>
+            <a class="station-route" href="${routeUrl}" target="_blank" rel="noopener noreferrer">길찾기 <span aria-hidden="true">↗</span></a>
+          </div>`;
+        item.querySelector(".station-item__main")?.addEventListener("click", () => focusStation(station, overlay));
         list.appendChild(item);
       });
 
-      const points = [[lat, lon], ...stations.slice(0, 12).map((station) => [station.lat, station.lon])];
-      map.fitBounds(L.latLngBounds(points), { padding: [40, 40], maxZoom: 14 });
-      const sourceText = payload.livePrices ? "오피넷 실시간 판매가격 기준" : "공개 지도 위치정보 기준";
-      setStatus(`${locationName} 반경 5km · ${productName} 주유소 ${stations.length}곳 · ${sourceText}`);
+      map.setBounds(bounds, 42, 42, 42, 42);
+      const scopeText = payload.scope === "region"
+        ? `${locationName} 반경 5km에 결과가 없어 해당 시·도 최저가 ${productName} 판매점을 표시했습니다.`
+        : `${locationName} 반경 ${payload.radiusKm || 5}km · ${productName} ${stations.length}곳`;
+      setStatus(`${scopeText} · 오피넷 판매가격 기준`);
     };
 
-    const searchStations = async (lat, lon, locationName) => {
-      const roundedLat = Number(lat).toFixed(3);
-      const roundedLon = Number(lon).toFixed(3);
-      const product = productSelect.value;
-      findButton.disabled = true;
-      centerButton.disabled = true;
-      setStatus(`${locationName} 주변 주유소를 찾는 중입니다.`);
+    const searchStations = async (lat, lon, locationName, knownArea = "") => {
+      const roundedLat = Number(lat).toFixed(4);
+      const roundedLon = Number(lon).toFixed(4);
+      const area = knownArea || await resolveAreaCode(Number(lat), Number(lon));
+      lastSearch = { lat: Number(roundedLat), lon: Number(roundedLon), locationName, area };
+      setBusy(true);
+      setStatus(`${locationName}의 ${productNames[activeProduct]} 판매가격을 확인하는 중입니다.`);
       try {
-        const response = await fetch(`/api/nearby-stations.json?lat=${roundedLat}&lon=${roundedLon}&product=${product}`);
+        const params = new URLSearchParams({ lat: roundedLat, lon: roundedLon, product: activeProduct });
+        if (area) params.set("area", area);
+        const response = await fetch(`/api/nearby-stations.json?${params}`);
         const payload = await response.json();
         if (!response.ok || !Array.isArray(payload.stations)) throw new Error(payload.message);
         renderStations(payload, Number(roundedLat), Number(roundedLon), locationName);
       } catch {
-        setStatus("주변 주유소 데이터를 잠시 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.");
+        setStatus("주변 판매가격을 잠시 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.");
       } finally {
-        findButton.disabled = false;
-        centerButton.disabled = false;
+        setBusy(false);
       }
     };
 
-    regionForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const [lat, lon] = regionSelect.value.split(",").map(Number);
-      searchStations(lat, lon, regionSelect.options[regionSelect.selectedIndex].text);
-    });
+    const searchAddress = (query) => {
+      const useResult = async (lat, lon, name) => {
+        const area = await resolveAreaCode(lat, lon);
+        map.panTo(new window.kakao.maps.LatLng(lat, lon));
+        searchStations(lat, lon, name, area);
+      };
 
-    centerButton.addEventListener("click", () => {
-      const center = map.getCenter();
-      searchStations(center.lat, center.lng, "지도 중심");
-    });
+      geocoder.addressSearch(query, (results, resultStatus) => {
+        if (resultStatus === window.kakao.maps.services.Status.OK && results[0]) {
+          useResult(Number(results[0].y), Number(results[0].x), query);
+          return;
+        }
+        places.keywordSearch(query, (placeResults, placeStatus) => {
+          if (placeStatus === window.kakao.maps.services.Status.OK && placeResults[0]) {
+            useResult(Number(placeResults[0].y), Number(placeResults[0].x), placeResults[0].place_name || query);
+            return;
+          }
+          setStatus("검색한 지역을 찾지 못했습니다. 동·읍·면이나 도로명 주소를 조금 더 자세히 입력해 주세요.");
+        }, { size: 1 });
+      });
+    };
 
-    findButton.addEventListener("click", () => {
-      if (!navigator.geolocation) {
-        setStatus("이 브라우저에서는 위치 기능을 지원하지 않습니다. 지역 선택 검색을 이용해 주세요.");
-        return;
-      }
-      setStatus("현재 위치를 확인하는 중입니다. 위치 권한 요청을 허용해 주세요.");
-      navigator.geolocation.getCurrentPosition(
-        ({ coords }) => searchStations(coords.latitude, coords.longitude, "내 위치"),
-        () => setStatus("위치 권한을 사용하지 않아도 됩니다. 위의 지역 선택 검색을 이용해 주세요."),
-        { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 },
-      );
+    loadKakaoMaps(kakaoKey).then(() => {
+      map = new window.kakao.maps.Map(mapElement, {
+        center: new window.kakao.maps.LatLng(36.45, 127.85),
+        level: 13,
+      });
+      geocoder = new window.kakao.maps.services.Geocoder();
+      places = new window.kakao.maps.services.Places();
+      map.setZoomable(true);
+
+      addressForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const query = addressInput.value.trim();
+        if (!query) {
+          addressInput.focus();
+          setStatus("찾고 싶은 동네나 주소를 입력해 주세요.");
+          return;
+        }
+        setStatus(`${query} 위치를 찾는 중입니다.`);
+        searchAddress(query);
+      });
+
+      regionButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const [lat, lon, area, name] = button.dataset.region.split(",");
+          searchStations(Number(lat), Number(lon), name, area);
+        });
+      });
+
+      productButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          activeProduct = button.dataset.product;
+          productButtons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+          if (lastSearch) searchStations(lastSearch.lat, lastSearch.lon, lastSearch.locationName, lastSearch.area);
+          else setStatus(`${productNames[activeProduct]}를 선택했습니다. 주소나 지역을 검색해 주세요.`);
+        });
+      });
+
+      centerButton.addEventListener("click", async () => {
+        const center = map.getCenter();
+        const area = await resolveAreaCode(center.getLat(), center.getLng());
+        searchStations(center.getLat(), center.getLng(), "지도 중심", area);
+      });
+
+      findButton.addEventListener("click", () => {
+        if (!navigator.geolocation) {
+          setStatus("이 브라우저에서는 위치 기능을 지원하지 않습니다. 주소 검색을 이용해 주세요.");
+          return;
+        }
+        setStatus("현재 위치를 확인하는 중입니다. 위치 권한 요청을 허용해 주세요.");
+        navigator.geolocation.getCurrentPosition(
+          async ({ coords }) => {
+            const area = await resolveAreaCode(coords.latitude, coords.longitude);
+            searchStations(coords.latitude, coords.longitude, "내 위치", area);
+          },
+          () => setStatus("위치 권한 없이도 이용할 수 있습니다. 동네나 주소를 입력해 검색해 주세요."),
+          { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 },
+        );
+      });
+
+      window.kakao.maps.event.addListener(map, "dragend", () => {
+        centerButton.classList.add("is-ready");
+      });
+    }).catch(() => {
+      setStatus("카카오맵을 불러오지 못했습니다. 페이지를 새로고침해 주세요.");
     });
   }
 </script>
