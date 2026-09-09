@@ -112,7 +112,7 @@ const schema = [
         description="현재 신청 가능한 제도와 상시 운영 제도를 구분했습니다. 대상과 기간은 바뀔 수 있으므로 신청 전 공식 안내에서 최종 조건을 확인하세요."
       />
       <div class="program-list">
-        {supportPrograms.map((program) => (
+        {supportPrograms.filter((program) => program.featured).map((program) => (
           <a class="program-item" href={program.href}>
             <span class="status-chip">{program.status}</span>
             <div><h3>{program.title}</h3><p>{program.summary}</p></div>

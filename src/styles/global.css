@@ -355,6 +355,9 @@ img { display: block; max-width: 100%; }
 .program-date span { display: block; color: var(--muted); font-size: 9px; }
 .program-date strong { display: block; margin-top: 6px; font-size: 12px; }
 .program-arrow { width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: var(--white); }
+.program-list--muted .status-chip { color: #6b6257; background: #e9e3d8; }
+.program-list--muted .program-item { color: #4e5756; }
+.program-list--muted .program-arrow { color: #786f64; background: #f4f0e8; }
 
 .guide-grid { margin-top: 38px; display: grid; grid-template-columns: 1.25fr .75fr .75fr; gap: 14px; }
 .guide-card { min-height: 290px; padding: 27px; display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 22px; background: rgba(255,255,255,.72); transition: transform .22s ease, box-shadow .22s ease; }
