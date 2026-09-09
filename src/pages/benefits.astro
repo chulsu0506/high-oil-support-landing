@@ -39,7 +39,7 @@ const schema = {
     <section class="content-section content-section--compact">
       <div class="program-list">
         {supportPrograms.map((program) => (
-          <a class="program-item" href={program.href} target="_blank" rel="noopener noreferrer">
+          <a class="program-item" href={program.href}>
             <span class="status-chip">{program.status}</span>
             <div><h3>{program.title}</h3><p>{program.summary}<br />출처: {program.source}</p></div>
             <div class="program-date"><span>신청·운영 기간</span><strong>{program.period}</strong></div>

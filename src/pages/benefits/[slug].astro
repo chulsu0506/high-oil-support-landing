@@ -1,0 +1,79 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import AdBlock from "../../components/AdBlock.astro";
+import { siteConfig, supportArticles } from "../../data/portal.js";
+
+export function getStaticPaths() {
+  return supportArticles.map((article) => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const title = `${article.title} 대상·신청방법 | 오일가이드`;
+const canonicalUrl = `${siteConfig.siteUrl}/benefits/${article.slug}/`;
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: article.title,
+  description: article.description,
+  dateModified: siteConfig.updatedAt,
+  inLanguage: "ko-KR",
+  mainEntityOfPage: canonicalUrl,
+  author: { "@type": "Organization", name: siteConfig.brandName },
+};
+---
+
+<BaseLayout title={title} description={article.description} siteName={siteConfig.brandName} canonicalUrl={canonicalUrl} ogImageUrl={new URL(siteConfig.ogImagePath, siteConfig.siteUrl).toString()} locale={siteConfig.locale} schema={schema} adsenseClientId={siteConfig.adsenseClientId}>
+  <Header brandName={siteConfig.brandName} />
+  <main class="page-shell article-page">
+    <article>
+      <header class="article-hero">
+        <a class="article-back" href="/benefits/">에너지 지원 제도</a>
+        <span class="status-chip">{article.status}</span>
+        <h1>{article.title}</h1>
+        <p>{article.description}</p>
+        <div class="article-highlights">
+          {article.highlights.map(([label, value]) => (
+            <div><span>{label}</span><strong>{value}</strong></div>
+          ))}
+        </div>
+      </header>
+
+      <div class="article-body">
+        <p class="article-updated">2026년 9월 9일 공식 자료 확인 기준</p>
+        {article.sections.map((section) => (
+          <section>
+            <h2>{section.title}</h2>
+            {section.paragraphs?.map((paragraph) => <p>{paragraph}</p>)}
+            {section.bullets && <ul>{section.bullets.map((item) => <li>{item}</li>)}</ul>}
+            {section.table && (
+              <div class="article-table-wrap">
+                <table>
+                  <thead><tr>{section.table.headers.map((header) => <th>{header}</th>)}</tr></thead>
+                  <tbody>{section.table.rows.map((row) => <tr>{row.map((cell) => <td>{cell}</td>)}</tr>)}</tbody>
+                </table>
+              </div>
+            )}
+          </section>
+        ))}
+
+        <div class="official-cta">
+          <div>
+            <span>최종 확인은 공식 기관에서</span>
+            <h2>대상 조회와 신청을 이어가세요</h2>
+            <p>예산과 행정지침에 따라 조건이 바뀔 수 있으므로 신청 직전 최신 공지를 확인하세요.</p>
+          </div>
+          <a class="button button--amber" href={article.officialHref} target="_blank" rel="noopener noreferrer">공식 안내로 이동 ↗</a>
+        </div>
+        <p class="source-note">출처: {article.source}. 오일가이드는 공개된 공식 정보를 이해하기 쉽게 요약하며 신청 접수나 대상 판정을 직접 처리하지 않습니다.</p>
+      </div>
+    </article>
+
+    <AdBlock clientId={siteConfig.adsenseClientId} slotId={siteConfig.adsenseSlotId} />
+  </main>
+  <Footer brandName={siteConfig.brandName} ownerName={siteConfig.ownerName} supportEmail={siteConfig.supportEmail} />
+</BaseLayout>

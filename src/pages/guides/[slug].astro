@@ -1,0 +1,61 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import AdBlock from "../../components/AdBlock.astro";
+import { guideArticles, siteConfig } from "../../data/portal.js";
+
+export function getStaticPaths() {
+  return guideArticles.map((article) => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const title = `${article.title} | 오일가이드`;
+const canonicalUrl = `${siteConfig.siteUrl}/guides/${article.slug}/`;
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: article.title,
+  description: article.description,
+  dateModified: siteConfig.updatedAt,
+  inLanguage: "ko-KR",
+  mainEntityOfPage: canonicalUrl,
+  author: { "@type": "Organization", name: siteConfig.brandName },
+};
+---
+
+<BaseLayout title={title} description={article.description} siteName={siteConfig.brandName} canonicalUrl={canonicalUrl} ogImageUrl={new URL(siteConfig.ogImagePath, siteConfig.siteUrl).toString()} locale={siteConfig.locale} schema={schema} adsenseClientId={siteConfig.adsenseClientId}>
+  <Header brandName={siteConfig.brandName} />
+  <main class="page-shell article-page">
+    <article>
+      <header class="article-hero article-hero--guide">
+        <a class="article-back" href="/#saving-guides">실전 절약 가이드</a>
+        <span class="article-number">GUIDE {article.number}</span>
+        <h1>{article.title}</h1>
+        <p>{article.intro}</p>
+      </header>
+
+      <div class="article-body">
+        {article.sections.map((section) => (
+          <section>
+            <h2>{section.title}</h2>
+            {section.paragraphs?.map((paragraph) => <p>{paragraph}</p>)}
+            {section.bullets && <ul>{section.bullets.map((item) => <li>{item}</li>)}</ul>}
+            {section.cta && (
+              <a class="button" href={section.cta.href} target={section.cta.external ? "_blank" : undefined} rel={section.cta.external ? "noopener noreferrer" : undefined}>{section.cta.label}</a>
+            )}
+          </section>
+        ))}
+        <div class="article-next">
+          <span>오늘 바로 적용해 보기</span>
+          <a href="/fuel-cost-calculator/">내 주유비 계산하기 →</a>
+        </div>
+      </div>
+    </article>
+    <AdBlock clientId={siteConfig.adsenseClientId} slotId={siteConfig.adsenseSlotId} />
+  </main>
+  <Footer brandName={siteConfig.brandName} ownerName={siteConfig.ownerName} supportEmail={siteConfig.supportEmail} />
+</BaseLayout>

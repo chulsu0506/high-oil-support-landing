@@ -8,7 +8,6 @@ import FuelCalculator from "../components/FuelCalculator.astro";
 import NearbyStations from "../components/NearbyStations.astro";
 import AdBlock from "../components/AdBlock.astro";
 import {
-  archivedSupportLinks,
   faqItems,
   savingGuides,
   siteConfig,
@@ -67,9 +66,9 @@ const schema = [
       <div class="hero__copy">
         <span class="eyebrow">오늘의 유가와 에너지비를 한 곳에서</span>
         <h1>
-          <span>기름값은 매일</span>
-          <span class="hero-line-two"><span>바뀌고, </span><em>절약은 숫자로</em></span>
-          <span>시작됩니다</span>
+          <span>오늘의 기름값,</span>
+          <span class="hero-line-two"><em>비교하고 계산하면</em></span>
+          <span>절약이 보입니다</span>
         </h1>
         <p class="hero__lede">
           전국 평균 유가부터 내 차의 월 주유비, 주변 주유소, 지금 신청할 수 있는 에너지 지원까지 필요한 순서대로 확인하세요.
@@ -84,10 +83,6 @@ const schema = [
       </div>
       <div class="hero__visual">
         <img src="/oilguide-hero.png" alt="해질녘 주유소에서 차량에 주유하는 모습" width="1536" height="1152" fetchpriority="high" />
-        <div class="hero__caption">
-          <span>OILGUIDE QUICK START</span>
-          <strong>오늘 가격을 확인하고<br />내 이동비를 먼저 계산하세요.</strong>
-        </div>
       </div>
     </section>
 
@@ -118,7 +113,7 @@ const schema = [
       />
       <div class="program-list">
         {supportPrograms.map((program) => (
-          <a class="program-item" href={program.href} target="_blank" rel="noopener noreferrer">
+          <a class="program-item" href={program.href}>
             <span class="status-chip">{program.status}</span>
             <div><h3>{program.title}</h3><p>{program.summary}</p></div>
             <div class="program-date"><span>신청·운영 기간</span><strong>{program.period}</strong></div>
@@ -149,17 +144,6 @@ const schema = [
     </section>
 
     <AdBlock clientId={siteConfig.adsenseClientId} slotId={siteConfig.adsenseSlotId} />
-
-    <aside class="archive reveal">
-      <div>
-        <small>PAST SUPPORT ARCHIVE</small>
-        <h2>종료된 고유가 피해지원금 자료</h2>
-        <p>과거 신청 당시의 기준을 확인하려는 분을 위해 기존 자료는 기록용으로 보존합니다. 현재 신청 가능한 지원으로 오해하지 않도록 종료 자료로 분리했습니다.</p>
-      </div>
-      <div class="archive__links">
-        {archivedSupportLinks.map((item) => <a href={item.href}><span>{item.title}</span><span>과거 자료 ↗</span></a>)}
-      </div>
-    </aside>
 
     <section class="content-section content-section--compact reveal">
       <SectionHeading kicker="FREQUENTLY ASKED" title="이용 전에 확인해 주세요" />
